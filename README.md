@@ -1,5 +1,5 @@
 This is a basic AI created in order to help Urban Rivals games by calculating
-what would be the most moves.
+what would be the best moves.
 
 Currently mostly in French.
 
