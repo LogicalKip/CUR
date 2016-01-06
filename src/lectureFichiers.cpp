@@ -3,13 +3,13 @@
 #include <string.h>
 
 
-#include "../include/main.h"
-#include "../include/constantes.h"
-#include "../include/fonctionsBoucles.h"
-#include "../include/autresFonctions.h"
-#include "../include/fonctionsAnnexes.h"
-#include "../include/lectureFichiers.h"
-#include "../include/calculPrealable.h"
+#include "../include/main.hpp"
+#include "../include/constantes.hpp"
+#include "../include/fonctionsBoucles.hpp"
+#include "../include/autresFonctions.hpp"
+#include "../include/fonctionsAnnexes.hpp"
+#include "../include/lectureFichiers.hpp"
+#include "../include/calculPrealable.hpp"
 
 
 

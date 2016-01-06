@@ -3,12 +3,12 @@
 #include <string.h>
 
 
-#include "../include/constantes.h"
-#include "../include/fonctionsBoucles.h"
-#include "../include/autresFonctions.h"
-#include "../include/fonctionsAnnexes.h"
-#include "../include/calculPrealable.h"
-#include "../include/lectureFichiers.h"
+#include "../include/constantes.hpp"
+#include "../include/fonctionsBoucles.hpp"
+#include "../include/autresFonctions.hpp"
+#include "../include/fonctionsAnnexes.hpp"
+#include "../include/calculPrealable.hpp"
+#include "../include/lectureFichiers.hpp"
 /// /// Si l'ennemi commence le round, il ne faut tester que cette carte là !
 ///on ne peut calculer que les furys de pillzrestants-3 ! quand j'ai 4 pillz il me dit : avec 3 pillz+fury = 76 victoires...
 /// a changer de partout si pas deja fait ! "faire si le pouvoir n'est pas stoppé ET qu'il n'est pas de type en cas de stop"....

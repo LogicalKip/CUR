@@ -3,12 +3,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "../include/main.h"
-#include "../include/constantes.h"
-#include "../include/fonctionsBoucles.h"
-#include "../include/fonctionsAnnexes.h"
-#include "../include/calculPrealable.h"
-#include "../include/lectureFichiers.h"
+#include "../include/main.hpp"
+#include "../include/constantes.hpp"
+#include "../include/fonctionsBoucles.hpp"
+#include "../include/fonctionsAnnexes.hpp"
+#include "../include/calculPrealable.hpp"
+#include "../include/lectureFichiers.hpp"
 
 
 int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)

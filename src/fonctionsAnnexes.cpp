@@ -3,12 +3,12 @@
 #include <stdio.h>
 
 
-#include "../include/main.h"
-#include "../include/constantes.h"
-#include "../include/fonctionsBoucles.h"
-#include "../include/autresFonctions.h"
-#include "../include/calculPrealable.h"
-#include "../include/lectureFichiers.h"
+#include "../include/main.hpp"
+#include "../include/constantes.hpp"
+#include "../include/fonctionsBoucles.hpp"
+#include "../include/autresFonctions.hpp"
+#include "../include/calculPrealable.hpp"
+#include "../include/lectureFichiers.hpp"
 
 
 #if defined (WIN32)

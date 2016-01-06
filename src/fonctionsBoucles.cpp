@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/main.h"
-#include "../include/constantes.h"
-#include "../include/autresFonctions.h"
-#include "../include/fonctionsAnnexes.h"
-#include "../include/calculPrealable.h"
-#include "../include/lectureFichiers.h"
+#include "../include/main.hpp"
+#include "../include/constantes.hpp"
+#include "../include/autresFonctions.hpp"
+#include "../include/fonctionsAnnexes.hpp"
+#include "../include/calculPrealable.hpp"
+#include "../include/lectureFichiers.hpp"
 
 int attaque(int puissance, int pillzUtilises)
 {

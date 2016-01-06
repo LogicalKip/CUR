@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/constantes.h"
-#include "../include/fonctionsBoucles.h"
-#include "../include/autresFonctions.h"
-#include "../include/fonctionsAnnexes.h"
-#include "../include/lectureFichiers.h"
-#include "../include/main.h"
+#include "../include/constantes.hpp"
+#include "../include/fonctionsBoucles.hpp"
+#include "../include/autresFonctions.hpp"
+#include "../include/fonctionsAnnexes.hpp"
+#include "../include/lectureFichiers.hpp"
+#include "../include/main.hpp"
 
 
 bool pouvoirActif(Carte carteATester, Carte adversaire)//ATTENTION !!! qu'on se le dise : pouvoir actif veut certes dire non stoppe, mais aussi qu'il est different de stop bonus/pouvoir, protection et autres !!! D'accord le nom de la fonction ne le laisse pas deviner, mais vas-y trouve moi un nom qui resume ce commentaire en quelques mots...
