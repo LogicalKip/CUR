@@ -193,7 +193,7 @@ void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemi
                                     if (!(determinQuiEstTeste && carteEnnemieEnvoyee >= 0 && carteEnnemieEnvoyee <= 3) || j == carteEnnemieEnvoyee) // En simplifiant par la logique, on obtient ça
                                     //TODO vérifier la condition, elle est bizarre, et mettre un commentaire qui résume mieux celle-ci. De plus, "compris entre 0 et 3", ça veut dire "différent de -1", non ?
                                         {// on ne continue que si j = la carte ennemie envoyée à coup sûr, ou qu'on s'en fout (= on teste toutes celles qui restent)
-                                            carteEnnemie[j].supposeeUtilisee = true; // la supposer utilisée
+                                            carteEnnemie[j].supposeeUtilisee = true;
                                             for (k = 0 ; k <= pillz ; k++) // Pour chaque pillz
                                             {
                                                 pillzRestants = pillz - k;

@@ -30,6 +30,7 @@
 tu gagneras si tu reponds comme il faut aux attaques (si ce n'est pas fait, il y a aura moins souvent de possibilites victorieuses) - a verifier - et est-ce qu'il le fait pas déjà?
 
 --------IMPORTANT-------------
+modifier le style d'indentation pour prendre moins de place
 privilegier l'egalite a la defaite
 vortex-like !!!
 poison et regen

@@ -369,7 +369,7 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     (*round)++;
     printf("\n\nLe %deme round va commencer\n", *round);
 
-    whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses);
+    printf(whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses).c_str());
 
     remiseAZero();
 

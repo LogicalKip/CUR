@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <string>
+#include <sstream>
 
 #include "../include/main.hpp"
 #include "../include/constantes.hpp"
@@ -214,9 +216,13 @@ void remiseAZero()
     furyUtilisee = false;
 }
 
-void whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses)
+std::string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses)
 {
-    printf("\n\nToi :\n\tPoints de vie : %d\n\tPillz : %d\n\nTon ennemi :\n\tPoints de vie : %d\n\tPillz : %d\n\n", pointsDeVie, pillz, pointsDeVieAdverses, pillzAdverses);
+	std::stringstream res;
+	
+	res << "\n\nToi :\n\tPoints de vie : " << pointsDeVie << "\n\tPillz : " << pillz << "\n\nTon ennemi :\n\tPoints de vie : " << pointsDeVieAdverses << "\n\tPillz : " << pillzAdverses << "\n\n";
+	
+	return res.str();
 }
 
 void affichageDesVictoires()

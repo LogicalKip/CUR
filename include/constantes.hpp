@@ -11,7 +11,7 @@ enum {NEANT, STOP_BONUS, STOP_POUVOIR, PROTECTION_POUVOIR, PROTECTION_BONUS,
         AUGMENTER_PUISSANCE, DIMINUER_PUISSANCE, AUGMENTER_DEGATS, DIMINUER_DEGATS, AUGMENTER_ATTAQUE, DIMINUER_ATTAQUE,
         VAINQUEUR, PERDANT, EGALITE, SUPPORT, POISON, GAIN_VIE, PERTE_VIE, GAIN_PILLZ, PERTE_PILLZ, EN_CAS_DE_STOP, COURAGE,
         REVANCHE, CONFIANCE, COPIER_DEGATS, COPIER_PUISSANCE, DEFAITE, CONTRECOUP, PROTECTION_PUISSANCE, PROTECTION_DEGATS};//fixit, recup pillz, pv/degats, copie pouvoir et bonus...
-
+//FIXME typer l'enum et ses utilisations
 
 typedef struct BonusDeCarte BonusDeCarte;
 struct BonusDeCarte
@@ -56,7 +56,7 @@ struct Carte
     int egalitesAvecXPillzEtFury[10];
     int combatAvecXPillzContreYAvecZpillz[13][4][13];
     char nom[20];
-    char clan[15];// 10 suffiraient? la flemme de tous les compter...
+    char clan[15];// FIXME 10 suffiraient? la flemme de tous les compter...
 };
 
 

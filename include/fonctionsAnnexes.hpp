@@ -3,6 +3,7 @@
 #ifndef DEF_ANNEXES
 #define DEF_ANNEXES
 
+#include <string>
 
 #include "constantes.hpp"
 #include "fonctionsBoucles.hpp"
@@ -18,7 +19,7 @@ void remiseAZero();
 
 void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *pointsDeVieAdverses);
 
-void whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
+std::string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
 
 void whatAboutPersos(Carte cards[4]);
 
