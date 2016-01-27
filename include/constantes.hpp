@@ -4,8 +4,11 @@
 
 #include <stdbool.h>
 
-#define EQUIPES_TEST //permet de générer deux équipes pour les besoins du debug
-#define NE_PAS_TRAITER_1ER_ROUND // permet de savoir s'il faut calculer le 1er round, ou demander ce qu'il s'est passé sans le traiter (pour des raisons de performance)
+
+#define X_PREMIERS_ROUNDS_A_TESTER 2
+
+//#define EQUIPES_TEST //permet de générer deux équipes pour les besoins du debug
+//#define NE_PAS_TRAITER_1ER_ROUND // permet de savoir s'il faut calculer le 1er round, ou demander ce qu'il s'est passé sans le traiter (pour des raisons de performance)
 
 enum {NEANT, STOP_BONUS, STOP_POUVOIR, PROTECTION_POUVOIR, PROTECTION_BONUS,
         AUGMENTER_PUISSANCE, DIMINUER_PUISSANCE, AUGMENTER_DEGATS, DIMINUER_DEGATS, AUGMENTER_ATTAQUE, DIMINUER_ATTAQUE,
@@ -55,6 +58,8 @@ struct Carte
     int egalitesAvecXPillz[13];
     int egalitesAvecXPillzEtFury[10];
     int combatAvecXPillzContreYAvecZpillz[13][4][13];
+    int guessedScore[13] = {0};
+    int guessedScoreFury[10] = {0};
     char nom[20];
     char clan[15];// FIXME 10 suffiraient? la flemme de tous les compter...
 };

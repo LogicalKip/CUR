@@ -357,11 +357,11 @@ void gererPremierRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* po
     whatHappenedRound1(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses);
     (*round)++;
 #else
-    traiterRound(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses, round, ennemiCommence);
+    traiterRound(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses, round, ennemiCommence, X_PREMIERS_ROUNDS_A_TESTER);
 #endif
 }
 
-void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsDeVieAdverses, int* round, bool courageEnnemi)
+void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsDeVieAdverses, int* round, bool courageEnnemi, int dernierRoundACalculer = 4)
 {
     int pillzQueJUtilise = 0, pillzQuIlUtilise = 0, carteQueJEnvoie = 0, carteQuIlEnvoie = 0, carteCourageEnnemie = -1;
     bool ilFautUtiliserLaFury = false, ennemiUtiliseFury = false;
@@ -376,11 +376,45 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     if (courageEnnemi)
         carteCourageEnnemie = carteEnvoyeeParLEnnemiEnCourage(&carteQuIlEnvoie, *round);
 
-    calculerRound(*round, *pointsDeVie, *pointsDeVieAdverses, *pillz, *pillzAdverses, true, carteCourageEnnemie);
+    calculerRound(*round, *pointsDeVie, *pointsDeVieAdverses, *pillz, *pillzAdverses, true, carteCourageEnnemie, dernierRoundACalculer);
     printf("Calcul termine.\n");
 
-    affichageDesVictoires();
-    faisCa(pillz, &pillzQueJUtilise, &carteQueJEnvoie, &ilFautUtiliserLaFury);
+
+	if (dernierRoundACalculer == 4) {
+		affichageDesVictoires();
+		faisCa(pillz, &pillzQueJUtilise, &carteQueJEnvoie, &ilFautUtiliserLaFury);
+	} else {
+		int max = carteAlliee[0].guessedScore[0];//FIXME et si déjà envoyée, lors d'un round >1 ?
+		int c = 0, p = 0;
+		bool f = false;
+		for (int i = 0 ; i < 4 ; i++) {
+			for (int j = 0 ; j < *pillz ; j++) {
+				if (!carteAlliee[i].utiliseeACoupSur && carteAlliee[i].guessedScore[j] > max) {
+					max = carteAlliee[i].guessedScore[j];
+					c = i;
+					p = j;
+					f = false;
+				}	
+				if (!carteAlliee[i].utiliseeACoupSur && carteAlliee[i].guessedScoreFury[j] > max) {
+					max = carteAlliee[i].guessedScore[j];
+					c = i;
+					p = j;
+					f = true;
+				}		
+			}
+		}
+		
+		printf("Il faut probablement envoyer %s avec %d pillz", carteAlliee[c].nom, p);
+		if (f) {
+			printf(" et la fury (heuristique = %d)", carteAlliee[c].guessedScoreFury[p]);
+		} else {	
+			printf(" (heuristique = %d)", carteAlliee[c].guessedScore[p]);
+		}
+		
+		carteQueJEnvoie = c;
+		pillzQueJUtilise = p;
+		ilFautUtiliserLaFury = f;
+	}
 
     if (courageEnnemi)
     {

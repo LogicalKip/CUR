@@ -160,11 +160,25 @@ bool jeRemporteLeRound(int resultat, int round)
         return egaliteDAttaque(round);
 }
 
+int oracle(int pv, int pillz, int pvE, int pillzE) {
+	return (pv+pillz) - (pvE-pillzE);
+}
 
-void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemis, bool determinQuiEstTeste, int carteEnnemieEnvoyee)
+
+void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemis, bool determinQuiEstTeste, int carteEnnemieEnvoyee, int dernierRoundACalculer)
 {
     int i, j, k, l, pillzRestants, pillzEnnemisRestants;
     bool jeGagne = false;
+    
+    if (nRound == dernierRoundACalculer+1) {
+    	if (furyUtilisee) {
+    		carteAlliee[persoTest].guessedScoreFury[pillzTest] 	+= oracle(pv, pillz, pvEnnemis, pillzEnnemis);
+    	} else {
+    		carteAlliee[persoTest].guessedScore[pillzTest]		+= oracle(pv, pillz, pvEnnemis, pillzEnnemis);
+    	}
+    	
+    	return;
+    }
 
     if (nRound == 5 || pvEnnemis <= 0 || pv <= 0) // Combat terminé
         {
@@ -205,23 +219,23 @@ void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemi
                                                     pillzEnnemisRestants = pillzEnnemis - l;
                                                     jeGagne = jeRemporteLeRound(carteAlliee[i].combatAvecXPillzContreYAvecZpillz[k][j][l], nRound);
 
-                                                    modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants, pillzEnnemisRestants, i, j, nRound, jeGagne, false, false);
+                                                    modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants, pillzEnnemisRestants, i, j, nRound, jeGagne, false, false, dernierRoundACalculer);
 
                                                     if (pillzRestants >= 3)
                                                         {
                                                             if (determinQuiEstTeste)
                                                                 furyUtilisee = true;
 
-                                                            modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants - 3, pillzEnnemisRestants , i, j, nRound, jeGagne, true, false);
+                                                            modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants - 3, pillzEnnemisRestants , i, j, nRound, jeGagne, true, false, dernierRoundACalculer);
 
                                                             if (pillzEnnemisRestants >= 3)
-                                                                modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants - 3, pillzEnnemisRestants - 3, i, j, nRound, jeGagne, true, true);
+                                                                modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants - 3, pillzEnnemisRestants - 3, i, j, nRound, jeGagne, true, true, dernierRoundACalculer);
 
                                                             if (determinQuiEstTeste)
                                                                 furyUtilisee = false;
                                                         }
                                                     if (pillzEnnemisRestants >= 3)
-                                                        modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants, pillzEnnemisRestants - 3, i, j, nRound, jeGagne, false, true);
+                                                        modifPillzPvEtRoundSuivant(pv, pvEnnemis, pillzRestants, pillzEnnemisRestants - 3, i, j, nRound, jeGagne, false, true, dernierRoundACalculer);
                                                 }
                                             }
                                             carteEnnemie[j].supposeeUtilisee = false; //desupposer
@@ -235,7 +249,7 @@ void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemi
 }
 
 
-void modifPillzPvEtRoundSuivant(int pv, int pvEnnemis, int pillz, int pillzEnnemis, int i, int j, int round, bool jeGagne, bool furyAllie, bool furyEnnemie)
+void modifPillzPvEtRoundSuivant(int pv, int pvEnnemis, int pillz, int pillzEnnemis, int i, int j, int round, bool jeGagne, bool furyAllie, bool furyEnnemie, int dernierRoundACalculer)
 {
     int pillzApresModif = pillz, pillzEnnemisApresModif = pillzEnnemis, pvApresModif = pv, pvEnnemisApresModif = pvEnnemis;
     if (jeGagne)
@@ -250,7 +264,7 @@ void modifPillzPvEtRoundSuivant(int pv, int pvEnnemis, int pillz, int pillzEnnem
             modifPerteGainPillz(j, &pillzEnnemisApresModif, carteEnnemie[j], i, &pillzApresModif, carteAlliee[i]);
         }
 
-    calculerRound(round + 1, pvApresModif, pvEnnemisApresModif, pillzApresModif, pillzEnnemisApresModif, false, -1);
+    calculerRound(round + 1, pvApresModif, pvEnnemisApresModif, pillzApresModif, pillzEnnemisApresModif, false, -1, dernierRoundACalculer);
 }
 
 

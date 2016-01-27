@@ -193,21 +193,23 @@ void remiseAZero()
 
     for (j = 0 ; j < 4 ; j++)//mise a 0 des victoires
         {
-            for (i = 0 ; i <= 12 ; i++)//condition de fin de boucle a changer?
+            for (i = 0 ; i <= 12 ; i++)//TODO condition de fin de boucle a changer?
                 {
                     carteAlliee[j].victoiresAvecXpillzEntreCrochets[i] = 0;
                     carteAlliee[j].defaitesAvecXpillz[i] = 0;
                     carteAlliee[j].egalitesAvecXPillz[i] = 0;
+                    carteAlliee[j].guessedScore[i] = 0;
                 }
         }
     ///Inutile de reset les ennemis, car on ne se sert pas de leurs nombresDeVictoires
     for (j = 0 ; j < 4 ; j++)//mise a 0 des victoires
         {
-            for (i = 0 ; i <= 9 ; i++)//condition de fin de boucle a changer?
+            for (i = 0 ; i <= 9 ; i++)//TODO condition de fin de boucle a changer?
                 {
                     carteAlliee[j].victoiresAvecXpillzEtFury[i] = 0;
                     carteAlliee[j].defaitesAvecXpillzEtFury[i] = 0;
                     carteAlliee[j].egalitesAvecXPillzEtFury[i] = 0;
+                    carteAlliee[j].guessedScoreFury[i] = 0;
                 }
         }
 
