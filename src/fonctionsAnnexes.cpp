@@ -1,7 +1,3 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -61,7 +57,7 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
 
     do
     {//qui l'ennemi a-t-il envoye?
-        printf("\nQuelle carte a envoye ton adversaire au premier round ? ");
+        cout << "\nQuelle carte a envoye ton adversaire au premier round ? ";
         cin >> nomEnnemi;
 
         changerMajuscules(nomEnnemi);
@@ -80,7 +76,7 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
         }
 
         if (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant)
-            printf("\nEuh.... Ou pas?\n");
+            cout << "\nEuh.... Ou pas?\n";
     }
     while (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant);
 
@@ -90,7 +86,7 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
 
     do
     {//qui l'utilisateur a-t-il envoye?
-        printf("\n\nEt toi, tu as envoye quelle carte au premier round ? ");
+        cout << "\n\nEt toi, tu as envoye quelle carte au premier round ? ";
         cin >> nomAllie;
 
         changerMajuscules(nomAllie);
@@ -109,7 +105,7 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
         }
 
         if (carteEnvoyeeAlliee < 0 || carteEnvoyeeAlliee > 3 || nomInexistant)
-            printf("\nNon, franchement...\n");
+            cout << "\nNon, franchement...\n";
     }
     while (carteEnvoyeeAlliee < 0 || carteEnvoyeeAlliee > 3 || nomInexistant);
 
@@ -165,7 +161,7 @@ void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
 {
     if (pointsDeVie < 1)
         {
-            printf("\nDesole... J'ai fait ce que j'ai pu, t'as qu'a t'en prendre au destin...\n\n\n...ou au programmeur ^^.\n\nN'hesite pas a me re-utiliser, ca marchera peut-etre mieux la prochaine fois !\n\n\nAppuie sur Entree pour quitter\n");
+            cout << "\nDesole... J'ai fait ce que j'ai pu, t'as qu'a t'en prendre au destin...\n\n\n...ou au programmeur ^^.\n\nN'hesite pas a me re-utiliser, ca marchera peut-etre mieux la prochaine fois !\n\n\nAppuie sur Entree pour quitter\n";
             getchar();
             exit(EXIT_SUCCESS);// enfin... façon de parler...
         }
@@ -183,7 +179,7 @@ void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
             Beep(561, 150);
             Beep(630, 525);
             #endif
-            printf("\nOUAIIIIS ! C'est nous qu'on est les meilleurs ! Allez salut !\n\n\n\nAppuie sur Entree pour quitter\n");
+            cout << "\nOUAIIIIS ! C'est nous qu'on est les meilleurs ! Allez salut !\n\n\n\nAppuie sur Entree pour quitter\n";
             getchar();
             exit(EXIT_SUCCESS);
         }
@@ -237,14 +233,14 @@ void affichageDesVictoires()
 {
     char afficher = 0;
 
-    printf("\nAfficher les victoires ? (o/n) : ");
+    cout << "\nAfficher les victoires ? (o/n) : ";
 
     while(afficher != 'o' && afficher != 'n')
        scanf("%c", &afficher);
 
     if (afficher == 'o')
     {
-        printf("\n\n\n");
+        cout << "\n\n\n";
         for (int j = 0 ; j < 4 ; j++)
             {//affichage des victoires histoire de verifier
                 if (! carteAlliee[j].utiliseeACoupSur)
@@ -253,18 +249,18 @@ void affichageDesVictoires()
 
                         for (int i = 0 ; i <= 12 ; i++)
                         {
-                            printf("\t");
+                            cout << "\t";
                             if (i < 10)
-                                printf(" ");
+                                cout << " ";
 
                             printf("%d pillz : V=%d E=%d D=%d", i, carteAlliee[j].victoiresAvecXpillzEntreCrochets[i], carteAlliee[j].egalitesAvecXPillz[i], carteAlliee[j].defaitesAvecXpillz[i]);
 
                             if (i <= 9)
                                 printf("\n\t %d pillz et fury : V=%d E=%d D=%d", i, carteAlliee[j].victoiresAvecXpillzEtFury[i], carteAlliee[j].egalitesAvecXPillzEtFury[i], carteAlliee[j].defaitesAvecXpillzEtFury[i]);
 
-                            printf("\n\n");
+                            cout << "\n\n";
                         }
-                        printf("\n\n\n");
+                        cout << "\n\n\n";
                     }
             }
     }
@@ -285,11 +281,11 @@ void quiCommenceSelonLesEtoiles()
         {//chouette, on a autant d'etoiles...
             do
             {//mais alors qui a commencé?
-                printf("Qui commence ? 1 si c'est ton ennemi qui commence, 0 si c'est toi\n");
+                cout << "Qui commence ? 1 si c'est ton ennemi qui commence, 0 si c'est toi\n";
                 scanf("%d", &repJoueur);
 
                 if (repJoueur != 0 && repJoueur != 1)
-                    printf("\nAh, ah, tres drole...\n");
+                    cout << "\nAh, ah, tres drole...\n";
             }while (repJoueur != 0 && repJoueur != 1);
 
             ennemiCommence = (repJoueur == 1);
@@ -299,22 +295,22 @@ void quiCommenceSelonLesEtoiles()
 void whatAboutPvr(PouvoirDeCarte pvr)
 {
     if (pvr.condition == SUPPORT)
-        printf("(support) ");
+        cout << "(support) ";
 
     if (pvr.condition == COURAGE)
-        printf("Courage : ");
+        cout << "Courage : ";
 
     if (pvr.condition == CONFIANCE)
-        printf("Confiance : ");
+        cout << "Confiance : ";
 
     if (pvr.condition == REVANCHE)
-        printf("Revanche : ");
+        cout << "Revanche : ";
 
     if (pvr.condition == EN_CAS_DE_STOP)
-        printf("Stop : ");
+        cout << "Stop : ";
 
     if (pvr.condition == DEFAITE)
-        printf("Defaite : ");
+        cout << "Defaite : ";
 
     if (pvr.type == AUGMENTER_ATTAQUE)
         printf("+%d a l'attaque", pvr.modificateur);
@@ -332,22 +328,22 @@ void whatAboutPvr(PouvoirDeCarte pvr)
         printf("+%d aux degats", pvr.modificateur);
 
     if (pvr.type == COPIER_PUISSANCE)
-        printf("Puissance = puissance adverse");
+        cout << "Puissance = puissance adverse";
 
     if (pvr.type == COPIER_DEGATS)
-        printf("Degats = Degats adverses");
+        cout << "Degats = Degats adverses";
 
     if (pvr.type == DIMINUER_DEGATS)
         printf("%d aux degats adverses, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == PROTECTION_BONUS)
-        printf("Protection bonus");
+        cout << "Protection bonus";
 
     if (pvr.type == STOP_BONUS)
-        printf("Stop bonus");
+        cout << "Stop bonus";
 
     if (pvr.type == STOP_POUVOIR)
-        printf("Stop pouvoir");
+        cout << "Stop pouvoir";
 
     if (pvr.type == PERTE_PILLZ)
         printf("%d pillz, min. %d", pvr.modificateur, pvr.minimum);
@@ -365,7 +361,7 @@ void whatAboutPvr(PouvoirDeCarte pvr)
         printf("Poison %d, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == NEANT)
-        printf("Aucun");
+        cout << "Aucun";
 }
 
 void whatAboutbn(BonusDeCarte bn)
@@ -389,13 +385,13 @@ void whatAboutbn(BonusDeCarte bn)
         printf("%d aux degats adverses, min. %d", bn.modificateur, bn.minimum);
 
     if (bn.type == STOP_BONUS)
-        printf("Stop bonus");
+        cout << "Stop bonus";
 
     if (bn.type == STOP_POUVOIR)
-        printf("Stop pouvoir");
+        cout << "Stop pouvoir";
 
     if (bn.type == PROTECTION_POUVOIR)
-        printf("Protection pouvoir");
+        cout << "Protection pouvoir";
 
     if (bn.type == PERTE_VIE)
         printf("%d vie, min. %d", bn.modificateur, bn.minimum);
@@ -407,7 +403,7 @@ void whatAboutbn(BonusDeCarte bn)
         printf("Poison %d, min. %d", bn.modificateur, bn.minimum);
 
     if (bn.type == NEANT)
-        printf("Aucun bonus");
+        cout << "Aucun bonus";
 }
 
 void whatAboutPersos(Carte cards[4])
@@ -420,7 +416,7 @@ void whatAboutPersos(Carte cards[4])
             cout << endl << "Bonus : ";
             whatAboutbn(cards[i].bonus);
         }
-    printf("\n\n\n\n\n");
+    cout << "\n\n\n\n\n";
 }
 
 

@@ -1,6 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+
+
+
 #include <iostream>
 #include <fstream>
 
@@ -214,9 +214,9 @@ void lectureDesFichiers()
                 nom = "no_nam";
 #else
             if (i == 0)
-                printf("\nQui est ta 1ere carte ? : ");
+                cout << "\nQui est ta 1ere carte ? : ";
             else
-                printf("\nQui est ta %deme carte ? : ", i + 1);
+                cout << "\nQui est ta " << i + 1 << "eme carte ? : ";
 
             cin >> nom;
 #endif
@@ -226,7 +226,7 @@ void lectureDesFichiers()
         while (!rechercheCarte(nom, &carteAlliee[i]));
     }
 
-    printf("\n");
+    cout << "\n";
 
     for (int i = 0 ; i < 4 ; i++)
     {
@@ -243,9 +243,9 @@ void lectureDesFichiers()
                 nom = "yu_mei";
 #else
             if (i == 0)
-                printf("\nQui est la 1ere carte adverse ? : ");
+                cout << "\nQui est la 1ere carte adverse ? : ";
             else
-                printf("\nQui est la %deme carte adverse ? : ", i + 1);
+                cout << "\nQui est la " << i + 1 << "eme carte adverse ? : ";
 
             cin >> nom;
 #endif

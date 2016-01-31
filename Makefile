@@ -8,11 +8,11 @@ SRC_DIR=src
 OBJ_DIR=obj
 INCLUDE_DIR=include
 
-_FICHIERS_H = calculPrealable.hpp fonctionsAnnexes.hpp game.hpp main.hpp autresFonctions.hpp constantes.hpp fonctionsBoucles.hpp lectureFichiers.hpp urban-mcts.hpp
+_FICHIERS_H = calculPrealable.hpp fonctionsAnnexes.hpp main.hpp autresFonctions.hpp constantes.hpp fonctionsBoucles.hpp lectureFichiers.hpp
 
 FICHIERS_H = $(patsubst %, $(INCLUDE_DIR)/%, $(_FICHIERS_H))
 
-_OBJ = calculPrealable.o fonctionsBoucles.o autresFonctions.o lectureFichiers.o main.o urban-mcts.o fonctionsAnnexes.o
+_OBJ = calculPrealable.o fonctionsBoucles.o autresFonctions.o lectureFichiers.o main.o fonctionsAnnexes.o
 
 OBJ = $(patsubst %, $(OBJ_DIR)/%, $(_OBJ))
 
@@ -29,4 +29,4 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(FICHIERS_H)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	rm $(OBJ) $(EXE) 
+	rm -f $(OBJ) $(EXE) 

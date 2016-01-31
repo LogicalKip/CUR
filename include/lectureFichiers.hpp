@@ -1,6 +1,4 @@
-
-#ifndef DEF_LECTURE
-#define DEF_LECTURE
+#pragma once
 
 
 #include "constantes.hpp"
@@ -29,6 +27,3 @@ void multiplicationParSupport();
 void definirBonus(Carte *card, int compteur);
 
 void affecterBonus(Carte *card, int type, int modificateur, int minimum);
-
-#endif
-

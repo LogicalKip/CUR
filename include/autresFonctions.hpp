@@ -1,6 +1,4 @@
-
-#ifndef DEF_AUTRESFONCTIONS
-#define DEF_AUTRESFONCTIONS
+#pragma once
 
 
 int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round);
@@ -19,7 +17,3 @@ void processGame(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieA
 void gererPremierRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsDeVieAdverses, int* round);
 
 void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsDeVieAdverses, int* round, bool courageEnnemi, int dernierRoundACalculer);
-
-
-#endif
-

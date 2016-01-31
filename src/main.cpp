@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include <iostream>
 
 #include "../include/constantes.hpp"
 #include "../include/fonctionsBoucles.hpp"
@@ -9,6 +6,9 @@
 #include "../include/fonctionsAnnexes.hpp"
 #include "../include/calculPrealable.hpp"
 #include "../include/lectureFichiers.hpp"
+
+using std::cout;
+
 /// /// Si l'ennemi commence le round, il ne faut tester que cette carte là !
 ///on ne peut calculer que les furys de pillzrestants-3 ! quand j'ai 4 pillz il me dit : avec 3 pillz+fury = 76 victoires...
 /// a changer de partout si pas deja fait ! "faire si le pouvoir n'est pas stoppé ET qu'il n'est pas de type en cas de stop"....
@@ -105,7 +105,7 @@ int main(void)
 //je crée ces variables dans le main pour quand on aura à demander des trucs qui n'ont rien a faire dans la fonction (ELO ou pas...), mieux vaut appeler des fonctions depuis le main.
 
     //je mets le programme en boucle ou on le relance a chaque fois? Il sera peut-être plus rapide la 2ème fois ? =D
-    printf("\nPress Enter to quit\n");
+    cout << "\nPress Enter to quit\n";
     getchar();
 
     return EXIT_SUCCESS;

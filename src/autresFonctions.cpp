@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
 #include <iostream>
 
 
@@ -27,9 +23,9 @@ int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
     do
     {
         if (round == 1)
-            printf("\n\n\nQuelle carte envoie l'ennemi pour le 1er round ? --> ");
+            cout << "\n\n\nQuelle carte envoie l'ennemi pour le 1er round ? --> ";
         else
-            printf("\n\n\nQuelle carte envoie l'ennemi pour le %deme round ? --> ", round);
+            cout << "\n\n\nQuelle carte envoie l'ennemi pour le " << round << "eme round ? --> ";
 
         cin >> nomDeLaCarte;
 
@@ -47,10 +43,10 @@ int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
         }
 
         if (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant)
-            printf("\nAh je ne pense pas, non !\n");
+            cout << "\nAh je ne pense pas, non !\n";
 
         else if (carteEnnemie[carteEnvoyeeEnnemie].utiliseeACoupSur && !nomInexistant)
-            printf("\nCette carte a deja ete utilisee !\n");
+            cout << "\nCette carte a deja ete utilisee !\n";
     }
     while (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || carteEnnemie[carteEnvoyeeEnnemie].utiliseeACoupSur);
 
@@ -70,10 +66,10 @@ void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnv
         dejaUtilisee = false;
         nomInexistant = false;
         if (round == 1)
-            printf("Alors, finalement qui a-t-il envoye lors de ce 1er round ? : ");
+            cout << "Alors, finalement qui a-t-il envoye lors de ce 1er round ? : ";
 
         else
-            printf("Alors, finalement qui a-t-il envoye lors de ce %deme round ? : ", round);//pour le 4eme round il a pas le choix...
+            cout << "Alors, finalement qui a-t-il envoye lors de ce " << round << "eme round ? : ";//pour le 4eme round il a pas le choix...
 
         cin >> nomDeLaCarte;
 
@@ -98,10 +94,10 @@ void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnv
         }
 
         if (carteEnnemieEnReponse < 0 || carteEnnemieEnReponse > 3 || (nomInexistant && !dejaUtilisee))
-            printf("\nEuuh.. Ou pas ?\n");
+            cout << "\nEuuh.. Ou pas ?\n";
 
         else if (dejaUtilisee)
-            printf("\nCette carte a deja ete utilisee !\n");
+            cout << "\nCette carte a deja ete utilisee !\n";
     }
     while (carteEnnemie[carteEnnemieEnReponse].utiliseeACoupSur || carteEnnemieEnReponse < 0 || carteEnnemieEnReponse > 3 || dejaUtilisee || nomInexistant);
 
@@ -121,11 +117,11 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
     {
         do
         {
-            printf("\nCombien de pillz sur la carte ? ");
-            scanf("%d", &pillzMis);
+            cout << "\nCombien de pillz sur la carte ? ";
+            cin >> pillzMis;
 
             if (pillzMis > pillzAdverses || pillzMis < 0)
-                printf("C'est impossible...\n");
+                cout << "C'est impossible...\n";
         }
         while (pillzMis > pillzAdverses || pillzMis < 0);
     }
@@ -135,11 +131,11 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
 
     if (pillzAdverses - pillzMis >= 3)
     {
-        printf("\nAvec la fury ? (o/n) : ");
+        cout << "\nAvec la fury ? (o/n) : ";
 
         while(furyOuPas != 'o' && furyOuPas != 'n')
         {
-            scanf("%c", &furyOuPas);
+            cin >> furyOuPas;
             furyOuPas = equivalentMinuscule(furyOuPas);
         }
 
@@ -153,8 +149,8 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
 }
 
 /**
- * permet de savoir si carteATester est un meilleur choix (avec un nombre de pillz donné) que le précédent
- * Pour l'instant : on prend la carte avec le plus gros pourcentage de (victoires+egalités), et en cas d'égalité (pas le même sens, attention), celle qui a un plus gros pourcentage de victoires
+ * permet de savoir si carteATester est un meilleur choix (avec un nombre de pillz donnÃ©) que le prÃ©cÃ©dent
+ * Pour l'instant : on prend la carte avec le plus gros pourcentage de (victoires+egalitÃ©s), et en cas d'Ã©galitÃ© (pas le mÃªme sens, attention), celle qui a un plus gros pourcentage de victoires
  */
 bool estMeilleur(Carte carteATester, int pillzATester, bool considererFuryPourTest/* si on traite que la fury (ou pas du tout) */, Carte meilleureCarteCourante, int pillzPourMeilleurChoixCourant, bool furyUtiliseePourMeilleurChoixCourant)
  {
@@ -175,7 +171,7 @@ bool estMeilleur(Carte carteATester, int pillzATester, bool considererFuryPourTe
     }
 
     // (Victoires+Egalites)/total
-    double pourcentageVEcarteATester = (double) (vicTest+egaTest) / (vicTest+egaTest+defTest);//multiplier par 1.0 avant la division si la conversion ne se fait pas comme prévu
+    double pourcentageVEcarteATester = (double) (vicTest+egaTest) / (vicTest+egaTest+defTest);//multiplier par 1.0 avant la division si la conversion ne se fait pas comme prÃ©vu
     double pourcentageVEMCC = (double) (vicMCC+egaMCC) / (vicMCC+egaMCC+defMCC);
 
     if (pourcentageVEcarteATester > 0)
@@ -184,7 +180,7 @@ bool estMeilleur(Carte carteATester, int pillzATester, bool considererFuryPourTe
             estMeilleur = true;
         else if (pourcentageVEcarteATester == pourcentageVEMCC)
         {
-            // permet de savoir si il y a un plus gros pourcentage de victoires parmi (victoires+egalités)
+            // permet de savoir si il y a un plus gros pourcentage de victoires parmi (victoires+egalitÃ©s)
             double vicSurVETest = (double) vicTest / (vicTest+egaTest), vicSurVEMCC = (double) vicMCC / (vicMCC+egaMCC);
             estMeilleur = vicSurVETest > vicSurVEMCC;
         }
@@ -196,10 +192,10 @@ bool estMeilleur(Carte carteATester, int pillzATester, bool considererFuryPourTe
 
 void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFautUtiliserLaFury)
 {
-    int i = 0, j = 0, pillzAUtiliser = 0;
+    int pillzAUtiliser = 0;
     bool victoireACoupSur = false, defaiteACoupSur = true;
-    Carte onlyDefaite;//carte bidon telle qu'une comparaison avec une vraie carte déterminera forcément la vraie carte comme un meilleur choix (sauf si la vraie est elle aussi à 0%...)
-    for (i = 0 ; i <= 12 ; i++)
+    Carte onlyDefaite;//carte bidon telle qu'une comparaison avec une vraie carte dÃ©terminera forcÃ©ment la vraie carte comme un meilleur choix (sauf si la vraie est elle aussi Ã  0%...)
+    for (int i = 0 ; i <= 12 ; i++)
     {
         if (i <= 9)
         {
@@ -217,11 +213,11 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
 
     *ilFautUtiliserLaFury = false;
 
-    for (i = 0 ; i < 4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
         {//calcul des persos/pillzs a utiliser avec la fury
             if (! carteAlliee[i].utiliseeACoupSur)
             {
-                for (j = 0 ; j <= *pillz - 3 ; j++)
+                for (int j = 0 ; j <= *pillz - 3 ; j++)
                 {
                     if (! victoireACoupSur)
                     {
@@ -246,11 +242,11 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
             }
         }
 
-        for (i = 0 ; i < 4 ; i++)
+        for (int i = 0 ; i < 4 ; i++)
     {//calcul des persos/pillzs a utiliser
         if (! carteAlliee[i].utiliseeACoupSur)
         {
-            for (j = 0 ; j <= *pillz ; j++)
+            for (int j = 0 ; j <= *pillz ; j++)
             {
                 if (! victoireACoupSur)
                 {
@@ -268,7 +264,7 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
                         carteAUtiliser = &carteAlliee[i];
                         pillzAUtiliser = j;
                         defaiteACoupSur = false;
-                        *ilFautUtiliserLaFury = false;//ca va se repeter beacoup de fois inutiles, non? mais tant pis c'est plus rapide d'écrire que de vérifier
+                        *ilFautUtiliserLaFury = false;//ca va se repeter beacoup de fois inutiles, non? mais tant pis c'est plus rapide d'Ã©crire que de vÃ©rifier
                     }
                 }
             }
@@ -278,7 +274,7 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
 
     if (defaiteACoupSur)
     {
-        printf("\nJe suis desole... Tu n'as pas la moindre chance de t'en sortir...\n\n\n\nSauf si l'autre a une coupure de courant !\nAppuie sur Entree pour quitter\n");
+        cout << "\nJe suis desole... Tu n'as pas la moindre chance de t'en sortir...\n\n\n\nSauf si l'autre a une coupure de courant !\nAppuie sur Entree pour quitter\n";
         getchar();
         exit(0);
     }
@@ -287,21 +283,21 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
         cout << endl << "Il faut utiliser " << carteAUtiliser->nom;
 
         if (*pillz > 0)
-            printf(" avec %d pillz", pillzAUtiliser);
+            cout << " avec " << pillzAUtiliser << " pillz";
 
         if (*ilFautUtiliserLaFury)
-            printf(" et la fury");
+            cout << " et la fury";
 
         if (victoireACoupSur)
-            printf(" (VICTOIRE A COUP SUR)");
+            cout << " (VICTOIRE A COUP SUR)";
 
-        printf(" (%d victoires eventuelles)\n\n", carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser]);
+        cout << " (" << carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser] << " victoires eventuelles)\n\n";
 
-        printf("Je suppose que tu as suivi mon conseil.\nJe considere donc cette carte ");
+        cout << "Je suppose que tu as suivi mon conseil.\nJe considere donc cette carte ";
         if (*pillz > 0)
-            printf("et ces pillz comme utilises.\n");
+            cout << "et ces pillz comme utilises.\n";
         else
-            printf("comme utilisee.\n");
+            cout << "comme utilisee.\n";
 
         int indicecarteAUtiliser = 0;
         while (&carteAlliee[indicecarteAUtiliser] != carteAUtiliser)
@@ -324,8 +320,8 @@ void majPvPillz(int *pointsDeVie, int *pointsDeVieAdverses, int *pillz, int *pil
     if (furyEnnemie)
         *pillzAdverses -= 3;
 
-    //FIXME possible de remplacer la condition par == vainqueur || egaliteDAttaque() (et else : modif en tant que perdant ?) le résultat est-il exactement le même ?
-    //qui a gagné
+    //FIXME possible de remplacer la condition par == vainqueur || egaliteDAttaque() (et else : modif en tant que perdant ?) le rÃ©sultat est-il exactement le mÃªme ?
+    //qui a gagnÃ©
     if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == VAINQUEUR)
     {// si je le bats
         modifPerteGainVie(carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], ilFautUtiliserLaFury);
@@ -374,7 +370,7 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     bool ilFautUtiliserLaFury = false, ennemiUtiliseFury = false;
 
     (*round)++;
-    printf("\n\nLe %deme round va commencer\n", *round);
+    cout << "\n\nLe " << *round << "eme round va commencer\n";
 
     cout << whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses);
 
@@ -384,14 +380,14 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
         carteCourageEnnemie = carteEnvoyeeParLEnnemiEnCourage(&carteQuIlEnvoie, *round);
 
     calculerRound(*round, *pointsDeVie, *pointsDeVieAdverses, *pillz, *pillzAdverses, true, carteCourageEnnemie, dernierRoundACalculer);
-    printf("Calcul termine.\n");
+    cout << "Calcul termine.\n";
 
 
 	if (dernierRoundACalculer == 4) { // Decided to brute force all 4 rounds
 		affichageDesVictoires();
 		faisCa(pillz, &pillzQueJUtilise, &carteQueJEnvoie, &ilFautUtiliserLaFury);
 	} else {
-		int max = carteAlliee[0].guessedScore[0];//FIXME et si déjà envoyée, lors d'un round >1 ?
+		int max = carteAlliee[0].guessedScore[0];//FIXME et si dÃ©jÃ  envoyÃ©e, lors d'un round >1 ?
 		int c = 0, p = 0;
 		bool f = false;
 		for (int i = 0 ; i < 4 ; i++) {
@@ -413,9 +409,9 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
 		
 		cout << "Il faut probablement envoyer " << carteAlliee[c].nom << " avec " << p << " pillz";
 		if (f) {
-			printf(" et la fury (heuristique = %d)", carteAlliee[c].guessedScoreFury[p]);//FIXME m'a déjà proposé 10 pillz et la fury
+			cout << " et la fury (heuristique = " << carteAlliee[c].guessedScoreFury[p] << ")";//FIXME m'a dÃ©jÃ  proposÃ© 10 pillz et la fury
 		} else {	
-			printf(" (heuristique = %d)", carteAlliee[c].guessedScore[p]);
+			cout << " (heuristique = " << carteAlliee[c].guessedScore[p] << ")";
 		}
 		
 		carteQueJEnvoie = c;
@@ -426,13 +422,13 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     if (courageEnnemi)
     {
         if (*pillzAdverses > 0)
-            printf("\nCa y est, c'est fait ?\nDis-moi combien de pillz avait mis l'ennemi sur sa carte des que tu peux.\n");
+            cout << "\nCa y est, c'est fait ?\nDis-moi combien de pillz avait mis l'ennemi sur sa carte des que tu peux.\n";
 
         ilAvaitMisCombienDePillz(*pillzAdverses, &pillzQuIlUtilise, &ennemiUtiliseFury);
     }
     else
     {
-        printf("\nCa y est, c'est fait ? Dis-moi ce qu'a fait l'ennemi en reponse des que tu peux.\n");
+        cout << "\nCa y est, c'est fait ? Dis-moi ce qu'a fait l'ennemi en reponse des que tu peux.\n";
         reponseEnnemie(pillzAdverses, &pillzQuIlUtilise, &carteQuIlEnvoie, &ennemiUtiliseFury, *round);
     }
 

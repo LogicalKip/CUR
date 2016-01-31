@@ -1,7 +1,4 @@
-
-#ifndef DEF_FONCTIONSBOUCLES
-#define DEF_FONCTIONSBOUCLES
-
+#pragma once
 
 int attaque(int puissance, int pillzUtilises);
 bool egaliteDAttaque(int round);
@@ -19,8 +16,3 @@ void modifPerteGainVie(int numVic, int *pvVic, Carte carteVic, int numDef, int *
 void modifPillzPvEtRoundSuivant(int pv, int pvEnnemis, int pillz, int pillzEnnemis, int i, int j, int round, bool jeGagne, bool furyAllie, bool furyEnnemie, int dernierRoundACalculer);
 
 bool jeRemporteLeRound(int resultat, int round);
-
-#endif
-
-
-

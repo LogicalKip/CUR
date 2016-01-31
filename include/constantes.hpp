@@ -1,7 +1,6 @@
-#ifndef DEF_CONSTANTES
-#define DEF_CONSTANTES
+#pragma once
 
-#include <stdbool.h>
+
 #include <string>
 
 #define CARDS_DB_FILENAME "persos.txt"
@@ -66,8 +65,4 @@ struct Carte
     string nom;
     string clan;
 };
-
-
-#endif
-
 

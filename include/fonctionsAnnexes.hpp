@@ -1,7 +1,4 @@
-
-
-#ifndef DEF_ANNEXES
-#define DEF_ANNEXES
+#pragma once
 
 #include <string>
 
@@ -35,7 +32,4 @@ void whatAboutPvr(PouvoirDeCarte pvr);
 
 void whatAboutbn(BonusDeCarte bn);
 
-
-
-#endif
 

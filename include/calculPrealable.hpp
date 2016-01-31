@@ -1,6 +1,4 @@
-
-#ifndef DEF_CALCUL
-#define DEF_CALCUL
+#pragma once
 
 
 #include "constantes.hpp"
@@ -23,5 +21,3 @@ void modifierAttaque(int *attaque, Carte carteAModifier, Carte carteAffrontee, i
 
 void determinerDegats(Carte *carteATester, Carte adversaire, int numCarteATester, int numAdversaire);
 
-
-#endif
