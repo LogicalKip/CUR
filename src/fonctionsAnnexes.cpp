@@ -4,68 +4,76 @@
 
 #include <string>
 #include <sstream>
-
+#include <iostream>
 #include "../include/main.hpp"
 #include "../include/constantes.hpp"
 #include "../include/fonctionsBoucles.hpp"
 #include "../include/autresFonctions.hpp"
 #include "../include/calculPrealable.hpp"
 #include "../include/lectureFichiers.hpp"
+#include "../include/fonctionsAnnexes.hpp"
 
+
+using std::cerr;
+using std::endl;
+using std::cout;
+using std::cin;
 
 #if defined (WIN32)
-#include <windows.h>
-void effacerEcran()
-{ system("CLS"); }
+    #include <windows.h>
+    void effacerEcran() { 
+        system("CLS"); 
+    }
 #elif defined (__linux)
-void effacerEcran()
-{ system("clear"); }
+    void effacerEcran(){ 
+        system("clear"); 
+    }
 #endif
 
-void erreur(char message[])
+void erreur(string message)
 {
-    printf("\n\nErreur dans l'écriture du programme : %s\nAppuyez sur Entrée pour quitter.\n", message);
+    cerr << endl << endl << "/!\\Something that should never happen in the program actually happened (:O) : " << message << endl 
+    << "Press Enter to quit" << endl;
     getchar();
     exit(0);
 }
 
-void changerMajuscules(char nom[])
+void changerMajuscules(string& nom)
 {
-    int i;
-    for (i = 0 ; i < strlen(nom) ; i++)
+    for (unsigned int i = 0 ; i < nom.length() ; i++)
         nom[i] = equivalentMinuscule(nom[i]);
 
-    for (i = 0 ; i < strlen(nom) ; i++)
-        {
-            if (nom[i] == '_' && nom[i+1] != '\0')// Même si, a priori, aucun nom de finira par \0...
-                nom[i+1] = equivalentMajuscule(nom[i+1]);
-        }
+    for (unsigned int i = 0 ; i < nom.length() ; i++)
+    {
+        if (nom[i] == '_' && nom[i+1] != '\0')// Même si, a priori, aucun nom de finira par \0...
+            nom[i+1] = equivalentMajuscule(nom[i+1]);
+    }
 
     nom[0] = equivalentMajuscule(nom[0]);
 }
 
 void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *pointsDeVieAdverses)
 {//mMhmmhm... peut-etre changer l'ordre des questions en fonction de qui commence, pour paraître plus logique...
-    int carteEnvoyeeEnnemie = 0, pillzUtilisesParLEnnemi = 0, carteEnvoyeeAlliee = 0, pillzUtilisesAllies = 0, i = 0;
+    int carteEnvoyeeEnnemie = 0, pillzUtilisesParLEnnemi = 0, carteEnvoyeeAlliee = 0, pillzUtilisesAllies = 0;
     bool ilUtiliseFury = false, jUtiliseFury = false, nomInexistant = false;
-    char nomEnnemi[20] = "rien";
-    char nomAllie[20] = "aussi";
+    string nomEnnemi;
+    string nomAllie;
 
     do
     {//qui l'ennemi a-t-il envoye?
         printf("\nQuelle carte a envoye ton adversaire au premier round ? ");
-        scanf("%s", nomEnnemi);
+        cin >> nomEnnemi;
 
         changerMajuscules(nomEnnemi);
 
-        for (i = 0 ; i < 4 ; i++)
+        for (int i = 0 ; i < 4 ; i++)
         {
-            if (strcmp(carteEnnemie[i].nom, nomEnnemi) == 0)
-                {
-                    carteEnvoyeeEnnemie = i;
-                    nomInexistant = false;
-                    break;
-                }
+            if (carteEnnemie[i].nom == nomEnnemi)
+            {
+                carteEnvoyeeEnnemie = i;
+                nomInexistant = false;
+                break;
+            }
 
             else
                 nomInexistant = true;
@@ -83,18 +91,18 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
     do
     {//qui l'utilisateur a-t-il envoye?
         printf("\n\nEt toi, tu as envoye quelle carte au premier round ? ");
-        scanf("%s", nomAllie);
+        cin >> nomAllie;
 
         changerMajuscules(nomAllie);
 
-        for (i = 0 ; i < 4 ; i++)
+        for (int i = 0 ; i < 4 ; i++)
         {
-            if (strcmp(carteAlliee[i].nom, nomAllie) == 0)
-                {
-                    carteEnvoyeeAlliee = i;
-                    nomInexistant = false;
-                    break;
-                }
+            if (carteAlliee[i].nom == nomAllie)
+            {
+                carteEnvoyeeAlliee = i;
+                nomInexistant = false;
+                break;
+            }
 
             else
                 nomInexistant = true;
@@ -183,17 +191,15 @@ void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
 
 void remiseAZero()
 {
-    int i = 0, j = 0;
-
-    for (i = 0 ; i < 4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
         {// aucune carte n'est utilisee !! Ou alors ca se saura grâce a utiliseeACoupSur. Ici ce sont les variables utilisees dans les boucles (qui servent a eviter de calculer une carte dont on considere qu'elle a ete utilisee lors des rounds precedents)
             carteAlliee[i].supposeeUtilisee = false;
             carteEnnemie[i].supposeeUtilisee = false;
         }
 
-    for (j = 0 ; j < 4 ; j++)//mise a 0 des victoires
+    for (int j = 0 ; j < 4 ; j++)//mise a 0 des victoires
         {
-            for (i = 0 ; i <= 12 ; i++)//TODO condition de fin de boucle a changer?
+            for (int i = 0 ; i <= 12 ; i++)//TODO condition de fin de boucle a changer?
                 {
                     carteAlliee[j].victoiresAvecXpillzEntreCrochets[i] = 0;
                     carteAlliee[j].defaitesAvecXpillz[i] = 0;
@@ -202,9 +208,9 @@ void remiseAZero()
                 }
         }
     ///Inutile de reset les ennemis, car on ne se sert pas de leurs nombresDeVictoires
-    for (j = 0 ; j < 4 ; j++)//mise a 0 des victoires
+    for (int j = 0 ; j < 4 ; j++)//mise a 0 des victoires
         {
-            for (i = 0 ; i <= 9 ; i++)//TODO condition de fin de boucle a changer?
+            for (int i = 0 ; i <= 9 ; i++)//TODO condition de fin de boucle a changer?
                 {
                     carteAlliee[j].victoiresAvecXpillzEtFury[i] = 0;
                     carteAlliee[j].defaitesAvecXpillzEtFury[i] = 0;
@@ -229,7 +235,6 @@ std::string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int 
 
 void affichageDesVictoires()
 {
-    int i = 0, j = 0;
     char afficher = 0;
 
     printf("\nAfficher les victoires ? (o/n) : ");
@@ -240,13 +245,13 @@ void affichageDesVictoires()
     if (afficher == 'o')
     {
         printf("\n\n\n");
-        for (j = 0 ; j < 4 ; j++)
+        for (int j = 0 ; j < 4 ; j++)
             {//affichage des victoires histoire de verifier
                 if (! carteAlliee[j].utiliseeACoupSur)
                     {
-                        printf("Victoires de %s :\n", carteAlliee[j].nom);
+                        cout << "Victoires de " << carteAlliee[j].nom << " :" << endl;
 
-                        for (i = 0 ; i <= 12 ; i++)
+                        for (int i = 0 ; i <= 12 ; i++)
                         {
                             printf("\t");
                             if (i < 10)
@@ -407,13 +412,12 @@ void whatAboutbn(BonusDeCarte bn)
 
 void whatAboutPersos(Carte cards[4])
 {
-    int i = 0;
-    for (i = 0 ; i < 4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
         {
-            printf("\n\n%s : %d etoiles des %s.\nPuissance : %d\tDegats : %d\nPouvoir : ", cards[i].nom, cards[i].nombreDEtoiles, cards[i].clan, cards[i].puissance, cards[i].degatsDeBase);
+            cout << endl << endl << cards[i].nom << " : " << cards[i].nombreDEtoiles << " etoiles des " << cards[i].clan << "." << endl << "Puissance : " << cards[i].puissance << "\tDegats : " << cards[i].degatsDeBase << endl << "Pouvoir : ";
             whatAboutPvr(cards[i].pouvoir);
 
-            printf("\nBonus : ");
+            cout << endl << "Bonus : ";
             whatAboutbn(cards[i].bonus);
         }
     printf("\n\n\n\n\n");

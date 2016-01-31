@@ -9,7 +9,9 @@
 #include "fonctionsBoucles.hpp"
 #include "autresFonctions.hpp"
 
-void changerMajuscules(char nom[]);
+using std::string;
+
+void changerMajuscules(string& nom);
 
 void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie);
 
@@ -27,7 +29,7 @@ void affichageDesVictoires();
 
 void quiCommenceSelonLesEtoiles();
 
-void erreur(char message[]);
+void erreur(string message);
 
 void whatAboutPvr(PouvoirDeCarte pvr);
 

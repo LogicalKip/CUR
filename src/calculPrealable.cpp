@@ -153,10 +153,9 @@ void determinerDegats(Carte *carteATester, Carte adversaire, int numCarteATester
 
 void calculDesDegats()
 {
-    int i = 0, j = 0;
-    for (i = 0 ; i < 4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
     {
-        for (j = 0 ; j < 4 ; j++)
+        for (int j = 0 ; j < 4 ; j++)
             {
                 determinerDegats(&carteAlliee[i], carteEnnemie[j], i, j);
                 determinerDegats(&carteEnnemie[j], carteAlliee[i], j, i);
@@ -279,11 +278,11 @@ void modifierAttaque(int *attaque, Carte carteAModifier, Carte carteAffrontee, i
 
 void calculDesDuels(int pillz, int pillzAdverses)//attention ! quand interviendront les conditions d'activation des pouvoirs (courage, revanche...), on ne pourra plus le calculer a l'avance ! Que faire?
 {
-    int i = 0, j = 0, k = 0, l = 0, attaqueAlliee = 0, attaqueEnnemie = 0;
+    int attaqueAlliee = 0, attaqueEnnemie = 0;
 
-    for (i = 0 ; i < 4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
     {
-        for (j = 0 ; j < 4 ; j++)
+        for (int j = 0 ; j < 4 ; j++)
             {
                 carteAlliee[i].pouvoirEstActifContre[j] = pouvoirActif(carteAlliee[i], carteEnnemie[j]);
                 carteEnnemie[j].pouvoirEstActifContre[i] = pouvoirActif(carteEnnemie[j], carteAlliee[i]);
@@ -300,13 +299,13 @@ void calculDesDuels(int pillz, int pillzAdverses)//attention ! quand interviendr
                 diminuerPuissance(carteAlliee[i], &carteEnnemie[j], i, j);
                 diminuerPuissance(carteEnnemie[j], &carteAlliee[i], j, i);
 
-                for (k = 0 ; k <= pillz ; k++)
+                for (int k = 0 ; k <= pillz ; k++)
                     {
                         attaqueAlliee = attaque(carteAlliee[i].puissanceTemporaire, k);
 
                         modifierAttaque(&attaqueAlliee, carteAlliee[i], carteEnnemie[j], i, j);
 
-                        for (l = 0 ; l <= pillzAdverses ; l++)
+                        for (int l = 0 ; l <= pillzAdverses ; l++)
                             {
                                 attaqueEnnemie = attaque(carteEnnemie[j].puissanceTemporaire, l);
 

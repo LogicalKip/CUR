@@ -8,6 +8,10 @@
 #include "autresFonctions.hpp"
 
 
+
+using std::string;
+
+
 char equivalentMinuscule(char lettreRecue);
 
 char equivalentMajuscule(char lettreRecue);
@@ -18,7 +22,7 @@ void miseEnPlaceDesBonusPourUnCamp(Carte equipe[4]);
 
 void lectureDesFichiers();
 
-bool rechercheCarte(char nomCherche[], Carte * card);
+bool rechercheCarte(string nomCherche, Carte * card);
 
 void multiplicationParSupport();
 

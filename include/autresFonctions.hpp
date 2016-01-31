@@ -13,9 +13,8 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
 
 void majPvPillz(int *pointsDeVie, int *pointsDeVieAdverses, int *pillz, int *pillzAdverses, int carteEnvoyeeParEnnemi, int carteQueJEnvoie, int pillzUtilisesParEnnemi, int pillzQueJUtilise, int round, int ilFautUtiliserLaFury, int furyEnnemie);
 
-void cestLEnnemiQuiCommence(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
+void processGame(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
 
-void cestMoiQuiCommence(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
 
 void gererPremierRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsDeVieAdverses, int* round);
 

@@ -42,6 +42,7 @@ verifier les conditions pour passer aux autres fonctions, les victoires++ et les
 --------EVENTUELLEMENT--------
 accelerer encore les rounds 1 ( il y a de petites optimisations simples proposées en commentaires)
 virer les includes inutiles
+printf, scanf -> cout, cin
 leaders
 pouvoir choisir entre égalité à coup sûr et continuer le calcul normalement
 ne pas demander "qui?" si les 4 sont la même carte
@@ -74,18 +75,18 @@ bool ennemiCommence = false, furyUtilisee = false;
 
 int main(void)
 {
-    int pillz = 12, pillzAdverses = 12, pointsDeVie = 14, pointsDeVieAdverses = 14, i = 0, j = 0, k = 0, l = 0;
+    int pillz = 12, pillzAdverses = 12, pointsDeVie = 14, pointsDeVieAdverses = 14;
 
     lectureDesFichiers();
-    for (i = 0 ; i < 4 ; i++)
+    for (int i = 0 ; i < 4 ; i++)
         {
             carteAlliee[i].utiliseeACoupSur = 0;
             carteEnnemie[i].utiliseeACoupSur = 0;
-            for (j = 0 ; j < 4 ; j++)
+            for (int j = 0 ; j < 4 ; j++)
                 {
-                    for (k = 0 ; k < pillz ; k++)
+                    for (int k = 0 ; k < pillz ; k++)
                         {
-                            for (l = 0 ; l < pillzAdverses ; l++)
+                            for (int l = 0 ; l < pillzAdverses ; l++)
                                 carteAlliee[i].combatAvecXPillzContreYAvecZpillz[k][j][l] = NEANT;
                         }
                 }
@@ -100,13 +101,11 @@ int main(void)
 
     quiCommenceSelonLesEtoiles();
 
-    if (ennemiCommence) //l'ennemi commence
-        cestLEnnemiQuiCommence(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses);
-    else //je commence
-        cestMoiQuiCommence(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses);//je crée ces variables dans le main pour quand on aura à demander des trucs qui n'ont rien a faire dans la fonction(ELO ou pas...), mieux vaut appeler des fonctions depuis le main.
+    processGame(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses);
+//je crée ces variables dans le main pour quand on aura à demander des trucs qui n'ont rien a faire dans la fonction (ELO ou pas...), mieux vaut appeler des fonctions depuis le main.
 
     //je mets le programme en boucle ou on le relance a chaque fois? Il sera peut-être plus rapide la 2ème fois ? =D
-    printf("\nAppuie sur Entree pour quitter\n");
+    printf("\nPress Enter to quit\n");
     getchar();
 
     return EXIT_SUCCESS;

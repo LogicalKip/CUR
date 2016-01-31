@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <iostream>
+
 
 #include "../include/main.hpp"
 #include "../include/constantes.hpp"
@@ -10,11 +12,16 @@
 #include "../include/calculPrealable.hpp"
 #include "../include/lectureFichiers.hpp"
 
+using std::cin;
+using std::cout;
+using std::string;
+using std::endl;
+
 
 int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
 {
-    char nomDeLaCarte[15] = "UNDEFINED";
-    int carteEnvoyeeEnnemie = 23, i = 0;
+    string nomDeLaCarte;
+    int carteEnvoyeeEnnemie = 23;
     bool nomInexistant = false;
 
     do
@@ -24,19 +31,19 @@ int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
         else
             printf("\n\n\nQuelle carte envoie l'ennemi pour le %deme round ? --> ", round);
 
-        scanf("%s", nomDeLaCarte);
+        cin >> nomDeLaCarte;
 
         changerMajuscules(nomDeLaCarte);
 
         nomInexistant = true;
-        for (i = 0 ; i < 4 ; i++)
+        for (int i = 0 ; i < 4 ; i++)
         {
-            if (strcmp(carteEnnemie[i].nom, nomDeLaCarte) == 0)
-                {
-                    carteEnvoyeeEnnemie = i;
-                    nomInexistant = false;
-                    break;
-                }
+            if (carteEnnemie[i].nom == nomDeLaCarte)
+            {
+                carteEnvoyeeEnnemie = i;
+                nomInexistant = false;
+                break;
+            }
         }
 
         if (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant)
@@ -54,9 +61,9 @@ int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
 
 void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnvoie, bool *ennemiUtiliseFury, int round)
 {
-    int carteEnnemieEnReponse = 0, i = 0;
+    int carteEnnemieEnReponse = 0;
     bool nomInexistant = false, dejaUtilisee = false;
-    char nomDeLaCarte[15] = "rien";
+    string nomDeLaCarte;
 
     do
     {//test de veracite
@@ -68,24 +75,24 @@ void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnv
         else
             printf("Alors, finalement qui a-t-il envoye lors de ce %deme round ? : ", round);//pour le 4eme round il a pas le choix...
 
-        scanf("%s", nomDeLaCarte);
+        cin >> nomDeLaCarte;
 
         changerMajuscules(nomDeLaCarte);
 
-        for (i = 0 ; i < 4 ; i++)
+        for (int i = 0 ; i < 4 ; i++)
         {
-            if (strcmp(carteEnnemie[i].nom, nomDeLaCarte) == 0)
+            if (carteEnnemie[i].nom == nomDeLaCarte)
+            {
+                if (carteEnnemie[i].utiliseeACoupSur)
+                    dejaUtilisee = true;
+                else
                 {
-                    if (carteEnnemie[i].utiliseeACoupSur)
-                        dejaUtilisee = true;
-                    else
-                        {
-                            carteEnnemieEnReponse = i;
-                            nomInexistant = false;
-                            dejaUtilisee = false;
-                            break;
-                        }
+                    carteEnnemieEnReponse = i;
+                    nomInexistant = false;
+                    dejaUtilisee = false;
+                    break;
                 }
+            }
             else
                 nomInexistant = true;
         }
@@ -127,17 +134,17 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
         pillzMis = 0;
 
     if (pillzAdverses - pillzMis >= 3)
+    {
+        printf("\nAvec la fury ? (o/n) : ");
+
+        while(furyOuPas != 'o' && furyOuPas != 'n')
         {
-            printf("\nAvec la fury ? (o/n) : ");
-
-            while(furyOuPas != 'o' && furyOuPas != 'n')
-            {
-                scanf("%c", &furyOuPas);
-                furyOuPas = equivalentMinuscule(furyOuPas);
-            }
-
-            *ennemiUtiliseFury = (furyOuPas == 'o');
+            scanf("%c", &furyOuPas);
+            furyOuPas = equivalentMinuscule(furyOuPas);
         }
+
+        *ennemiUtiliseFury = (furyOuPas == 'o');
+    }
 
     else
         *ennemiUtiliseFury = false;
@@ -150,7 +157,7 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
  * Pour l'instant : on prend la carte avec le plus gros pourcentage de (victoires+egalités), et en cas d'égalité (pas le même sens, attention), celle qui a un plus gros pourcentage de victoires
  */
 bool estMeilleur(Carte carteATester, int pillzATester, bool considererFuryPourTest/* si on traite que la fury (ou pas du tout) */, Carte meilleureCarteCourante, int pillzPourMeilleurChoixCourant, bool furyUtiliseePourMeilleurChoixCourant)
-{
+ {
     // On raccourcit les noms de variable
     int vicTest = carteATester.victoiresAvecXpillzEntreCrochets[pillzATester], defTest = carteATester.defaitesAvecXpillz[pillzATester], egaTest = carteATester.egalitesAvecXPillz[pillzATester];
     int vicMCC = meilleureCarteCourante.victoiresAvecXpillzEntreCrochets[pillzPourMeilleurChoixCourant], defMCC = meilleureCarteCourante.defaitesAvecXpillz[pillzPourMeilleurChoixCourant], egaMCC = meilleureCarteCourante.egalitesAvecXPillz[pillzPourMeilleurChoixCourant];
@@ -196,11 +203,11 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
     {
         if (i <= 9)
         {
-             onlyDefaite.defaitesAvecXpillzEtFury[i] = 10;
-             onlyDefaite.egalitesAvecXPillzEtFury[i] = 0;
-             onlyDefaite.victoiresAvecXpillzEtFury[i] = 0;
-        }
-        onlyDefaite.defaitesAvecXpillz[i] = 10;
+           onlyDefaite.defaitesAvecXpillzEtFury[i] = 10;
+           onlyDefaite.egalitesAvecXPillzEtFury[i] = 0;
+           onlyDefaite.victoiresAvecXpillzEtFury[i] = 0;
+       }
+       onlyDefaite.defaitesAvecXpillz[i] = 10;
         onlyDefaite.victoiresAvecXpillzEntreCrochets[i] = 0;///ou -1 ?
         onlyDefaite.egalitesAvecXPillz[i] = 0;
     }
@@ -213,95 +220,95 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
     for (i = 0 ; i < 4 ; i++)
         {//calcul des persos/pillzs a utiliser avec la fury
             if (! carteAlliee[i].utiliseeACoupSur)
+            {
+                for (j = 0 ; j <= *pillz - 3 ; j++)
                 {
-                    for (j = 0 ; j <= *pillz - 3 ; j++)
+                    if (! victoireACoupSur)
+                    {
+                        if (carteAlliee[i].defaitesAvecXpillzEtFury[j] == 0 && carteAlliee[i].egalitesAvecXPillzEtFury[j] == 0 && carteAlliee[i].victoiresAvecXpillzEtFury[j] > 0)
                         {
-                            if (! victoireACoupSur)
-                                {
-                                    if (carteAlliee[i].defaitesAvecXpillzEtFury[j] == 0 && carteAlliee[i].egalitesAvecXPillzEtFury[j] == 0 && carteAlliee[i].victoiresAvecXpillzEtFury[j] > 0)
-                                        {
-                                            carteAUtiliser = &carteAlliee[i];
-                                            pillzAUtiliser = j;
-                                            *ilFautUtiliserLaFury = true;
-                                            victoireACoupSur = true;
-                                            defaiteACoupSur = false;
-                                        }
-
-                                    else if (estMeilleur(carteAlliee[i], j, true, *carteAUtiliser, pillzAUtiliser, *ilFautUtiliserLaFury))
-                                        {
-                                            carteAUtiliser = &carteAlliee[i];
-                                            pillzAUtiliser = j;
-                                            defaiteACoupSur = false;
-                                            *ilFautUtiliserLaFury = true;
-                                        }
-                                }
+                            carteAUtiliser = &carteAlliee[i];
+                            pillzAUtiliser = j;
+                            *ilFautUtiliserLaFury = true;
+                            victoireACoupSur = true;
+                            defaiteACoupSur = false;
                         }
+
+                        else if (estMeilleur(carteAlliee[i], j, true, *carteAUtiliser, pillzAUtiliser, *ilFautUtiliserLaFury))
+                        {
+                            carteAUtiliser = &carteAlliee[i];
+                            pillzAUtiliser = j;
+                            defaiteACoupSur = false;
+                            *ilFautUtiliserLaFury = true;
+                        }
+                    }
                 }
+            }
         }
 
-    for (i = 0 ; i < 4 ; i++)
-        {//calcul des persos/pillzs a utiliser
-            if (! carteAlliee[i].utiliseeACoupSur)
+        for (i = 0 ; i < 4 ; i++)
+    {//calcul des persos/pillzs a utiliser
+        if (! carteAlliee[i].utiliseeACoupSur)
+        {
+            for (j = 0 ; j <= *pillz ; j++)
+            {
+                if (! victoireACoupSur)
                 {
-                    for (j = 0 ; j <= *pillz ; j++)
-                        {
-                            if (! victoireACoupSur)
-                                {
-                                    if (carteAlliee[i].defaitesAvecXpillz[j] == 0 && carteAlliee[i].egalitesAvecXPillz[j] == 0 && carteAlliee[i].victoiresAvecXpillzEntreCrochets[j] > 0)
-                                        {
-                                            carteAUtiliser = &carteAlliee[i];
-                                            pillzAUtiliser = j;
-                                            *ilFautUtiliserLaFury = false;
-                                            victoireACoupSur = true;
-                                            defaiteACoupSur = false;
-                                        }
+                    if (carteAlliee[i].defaitesAvecXpillz[j] == 0 && carteAlliee[i].egalitesAvecXPillz[j] == 0 && carteAlliee[i].victoiresAvecXpillzEntreCrochets[j] > 0)
+                    {
+                        carteAUtiliser = &carteAlliee[i];
+                        pillzAUtiliser = j;
+                        *ilFautUtiliserLaFury = false;
+                        victoireACoupSur = true;
+                        defaiteACoupSur = false;
+                    }
 
-                                    else if (estMeilleur(carteAlliee[i], j, false, *carteAUtiliser, pillzAUtiliser, *ilFautUtiliserLaFury))
-                                        {
-                                            carteAUtiliser = &carteAlliee[i];
-                                            pillzAUtiliser = j;
-                                            defaiteACoupSur = false;
-                                            *ilFautUtiliserLaFury = false;//ca va se repeter beacoup de fois inutiles, non? mais tant pis c'est plus rapide d'écrire que de vérifier
-                                        }
-                                }
-                        }
+                    else if (estMeilleur(carteAlliee[i], j, false, *carteAUtiliser, pillzAUtiliser, *ilFautUtiliserLaFury))
+                    {
+                        carteAUtiliser = &carteAlliee[i];
+                        pillzAUtiliser = j;
+                        defaiteACoupSur = false;
+                        *ilFautUtiliserLaFury = false;//ca va se repeter beacoup de fois inutiles, non? mais tant pis c'est plus rapide d'écrire que de vérifier
+                    }
                 }
+            }
         }
+    }
 
 
     if (defaiteACoupSur)
-        {
-            printf("\nJe suis desole... Tu n'as pas la moindre chance de t'en sortir...\n\n\n\nSauf si l'autre a une coupure de courant !\nAppuie sur Entree pour quitter\n");
-            getchar();
-            exit(0);
-        }
+    {
+        printf("\nJe suis desole... Tu n'as pas la moindre chance de t'en sortir...\n\n\n\nSauf si l'autre a une coupure de courant !\nAppuie sur Entree pour quitter\n");
+        getchar();
+        exit(0);
+    }
     else
-        {
-            printf("\nIl faut utiliser %s", carteAUtiliser->nom);
+    {
+        cout << endl << "Il faut utiliser " << carteAUtiliser->nom;
 
-            if (*pillz > 0)
-                printf(" avec %d pillz", pillzAUtiliser);
+        if (*pillz > 0)
+            printf(" avec %d pillz", pillzAUtiliser);
 
-            if (*ilFautUtiliserLaFury)
-                printf(" et la fury");
+        if (*ilFautUtiliserLaFury)
+            printf(" et la fury");
 
-            if (victoireACoupSur)
-                printf(" (VICTOIRE A COUP SUR)");
+        if (victoireACoupSur)
+            printf(" (VICTOIRE A COUP SUR)");
 
-            printf(" (%d victoires eventuelles)\n\n", carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser]);
+        printf(" (%d victoires eventuelles)\n\n", carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser]);
 
-            printf("Je suppose que tu as suivi mon conseil.\nJe considere donc cette carte ");
-            if (*pillz > 0)
-                printf("et ces pillz comme utilises.\n");
-            else
-                printf("comme utilisee.\n");
+        printf("Je suppose que tu as suivi mon conseil.\nJe considere donc cette carte ");
+        if (*pillz > 0)
+            printf("et ces pillz comme utilises.\n");
+        else
+            printf("comme utilisee.\n");
 
-            int indicecarteAUtiliser = 0;
-            while (&carteAlliee[indicecarteAUtiliser] != carteAUtiliser)
-                indicecarteAUtiliser++;
-            *carteQueJEnvoie = indicecarteAUtiliser;
-            *pillzQueJUtilise = pillzAUtiliser;
-        }
+        int indicecarteAUtiliser = 0;
+        while (&carteAlliee[indicecarteAUtiliser] != carteAUtiliser)
+            indicecarteAUtiliser++;
+        *carteQueJEnvoie = indicecarteAUtiliser;
+        *pillzQueJUtilise = pillzAUtiliser;
+    }
 }
 
 void majPvPillz(int *pointsDeVie, int *pointsDeVieAdverses, int *pillz, int *pillzAdverses, int carteEnvoyeeParEnnemi, int carteQueJEnvoie, int pillzUtilisesParEnnemi, int pillzQueJUtilise, int round, int ilFautUtiliserLaFury, int furyEnnemie)//la MAJ des pillz doit se faire ici
@@ -320,31 +327,31 @@ void majPvPillz(int *pointsDeVie, int *pointsDeVieAdverses, int *pillz, int *pil
     //FIXME possible de remplacer la condition par == vainqueur || egaliteDAttaque() (et else : modif en tant que perdant ?) le résultat est-il exactement le même ?
     //qui a gagné
     if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == VAINQUEUR)
+    {// si je le bats
+        modifPerteGainVie(carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], ilFautUtiliserLaFury);
+        modifPerteGainPillz(carteQueJEnvoie, pillz, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pillzAdverses, carteEnnemie[carteEnvoyeeParEnnemi]);
+    }
+
+    else if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == PERDANT)
+    {// si il me bat
+        modifPerteGainVie(carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], furyEnnemie);
+        modifPerteGainPillz(carteEnvoyeeParEnnemi, pillzAdverses, carteEnnemie[carteEnvoyeeParEnnemi], carteQueJEnvoie, pillz, carteAlliee[carteQueJEnvoie]);
+    }
+
+    else if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == EGALITE)
+    {//egalite
+        if (egaliteDAttaque(round))//return true : j'ai gagne
         {// si je le bats
             modifPerteGainVie(carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], ilFautUtiliserLaFury);
             modifPerteGainPillz(carteQueJEnvoie, pillz, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pillzAdverses, carteEnnemie[carteEnvoyeeParEnnemi]);
         }
 
-    else if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == PERDANT)
+        else if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == PERDANT)
         {// si il me bat
             modifPerteGainVie(carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], furyEnnemie);
             modifPerteGainPillz(carteEnvoyeeParEnnemi, pillzAdverses, carteEnnemie[carteEnvoyeeParEnnemi], carteQueJEnvoie, pillz, carteAlliee[carteQueJEnvoie]);
         }
-
-    else if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == EGALITE)
-        {//egalite
-            if (egaliteDAttaque(round))//return true : j'ai gagne
-                {// si je le bats
-                    modifPerteGainVie(carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], ilFautUtiliserLaFury);
-                    modifPerteGainPillz(carteQueJEnvoie, pillz, carteAlliee[carteQueJEnvoie], carteEnvoyeeParEnnemi, pillzAdverses, carteEnnemie[carteEnvoyeeParEnnemi]);
-                }
-
-            else if (carteAlliee[carteQueJEnvoie].combatAvecXPillzContreYAvecZpillz[pillzQueJUtilise][carteEnvoyeeParEnnemi][pillzUtilisesParEnnemi] == PERDANT)
-                {// si il me bat
-                    modifPerteGainVie(carteEnvoyeeParEnnemi, pointsDeVieAdverses, carteEnnemie[carteEnvoyeeParEnnemi], carteQueJEnvoie, pointsDeVie, carteAlliee[carteQueJEnvoie], furyEnnemie);
-                    modifPerteGainPillz(carteEnvoyeeParEnnemi, pillzAdverses, carteEnnemie[carteEnvoyeeParEnnemi], carteQueJEnvoie, pillz, carteAlliee[carteQueJEnvoie]);
-                }
-        }
+    }
 
     else
         erreur("autresFonctions/majPvPillz : combat ne vaut VAINQUEUR, ni PERDANT, ni EGALITE\n");
@@ -369,7 +376,7 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     (*round)++;
     printf("\n\nLe %deme round va commencer\n", *round);
 
-    printf(whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses).c_str());
+    cout << whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses);
 
     remiseAZero();
 
@@ -380,7 +387,7 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     printf("Calcul termine.\n");
 
 
-	if (dernierRoundACalculer == 4) {
+	if (dernierRoundACalculer == 4) { // Decided to brute force all 4 rounds
 		affichageDesVictoires();
 		faisCa(pillz, &pillzQueJUtilise, &carteQueJEnvoie, &ilFautUtiliserLaFury);
 	} else {
@@ -404,9 +411,9 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
 			}
 		}
 		
-		printf("Il faut probablement envoyer %s avec %d pillz", carteAlliee[c].nom, p);
+		cout << "Il faut probablement envoyer " << carteAlliee[c].nom << " avec " << p << " pillz";
 		if (f) {
-			printf(" et la fury (heuristique = %d)", carteAlliee[c].guessedScoreFury[p]);
+			printf(" et la fury (heuristique = %d)", carteAlliee[c].guessedScoreFury[p]);//FIXME m'a déjà proposé 10 pillz et la fury
 		} else {	
 			printf(" (heuristique = %d)", carteAlliee[c].guessedScore[p]);
 		}
@@ -434,26 +441,14 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     testFinDeJeu(*pointsDeVieAdverses, *pointsDeVie);
 }
 
-void cestLEnnemiQuiCommence(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses)
+void processGame(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses) 
 {
     int round = 0;
 
     gererPremierRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round);
 
-    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, false/*(courageEnnemi)*/);//je commence les rounds 2 et 4
-    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, true);
-    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, false);
+    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, !ennemiCommence /*(courageEnnemi)*/);//je commence les rounds 2 et 4
+    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round,  ennemiCommence);
+    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, !ennemiCommence);
 }
-
-void cestMoiQuiCommence(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses)
-{
-    int round = 0;
-
-    gererPremierRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round);
-
-    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, true/*(courageEnnemi)*/);
-    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, false);//je commence les rounds 1 et 3
-    traiterRound(&pillz, &pillzAdverses, &pointsDeVie, &pointsDeVieAdverses, &round, true);
-}
-
 
