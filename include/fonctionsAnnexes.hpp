@@ -18,7 +18,7 @@ void remiseAZero();
 
 void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *pointsDeVieAdverses);
 
-std::string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
+string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
 
 void whatAboutPersos(Carte cards[4]);
 
@@ -28,8 +28,5 @@ void quiCommenceSelonLesEtoiles();
 
 void erreur(string message);
 
-void whatAboutPvr(PouvoirDeCarte pvr);
-
-void whatAboutbn(BonusDeCarte bn);
-
+void whatAboutAbility(CardAbility pvr);
 

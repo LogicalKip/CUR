@@ -14,6 +14,8 @@ using std::cerr;
 using std::endl;
 using std::cout;
 using std::cin;
+using std::string;
+using std::stringstream;
 
 #if defined (WIN32)
     #include <windows.h>
@@ -154,21 +156,19 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
         }
 
     else
-        erreur("fonctionsAnnexes/whatHappenedRound1 : combat ne vaut ni VAINQUEUR, ni PERDANT, ni EGALITE\n");
+        erreur("fonctionsAnnexes/whatHappenedRound1 : combat is not of any expected value");
 }
 
 void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
 {
     if (pointsDeVie < 1)
         {
-            cout << "\nDesole... J'ai fait ce que j'ai pu, t'as qu'a t'en prendre au destin...\n\n\n...ou au programmeur ^^.\n\nN'hesite pas a me re-utiliser, ca marchera peut-etre mieux la prochaine fois !\n\n\nAppuie sur Entree pour quitter\n";
-            getchar();
-            exit(EXIT_SUCCESS);// enfin... façon de parler...
+            cout << endl << "Sorry... I did what I could, but fate has failed you...\n\n\n... unless it's the programmer ^^." << endl << endl << "Better luck next time !" << endl;
         }
 
     if (pointsDeVieAdverses < 1)
         {
-            #if defined (WIN32)//petit cadeau pour les windowsiens vainqueurs ;)
+            #if defined (WIN32)//small gift for windows users who won ;)
             Beep(630, 150);
             Beep(630, 150);
             Beep(630, 150);
@@ -179,9 +179,8 @@ void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
             Beep(561, 150);
             Beep(630, 525);
             #endif
-            cout << "\nOUAIIIIS ! C'est nous qu'on est les meilleurs ! Allez salut !\n\n\n\nAppuie sur Entree pour quitter\n";
-            getchar();
-            exit(EXIT_SUCCESS);
+            cout << endl << "Yeah ! Who's the best ? Alright, see you next time !" << endl;
+            quit();
         }
 }
 
@@ -220,11 +219,11 @@ void remiseAZero()
     furyUtilisee = false;
 }
 
-std::string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses)
+string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses)
 {
-	std::stringstream res;
+	stringstream res;
 	
-	res << "\n\nToi :\n\tPoints de vie : " << pointsDeVie << "\n\tPillz : " << pillz << "\n\nTon ennemi :\n\tPoints de vie : " << pointsDeVieAdverses << "\n\tPillz : " << pillzAdverses << "\n\n";
+	res << "\n\nYou :\n\tHealth : " << pointsDeVie << "\n\tPillz : " << pillz << "\n\nThe opponent :\n\tHealth : " << pointsDeVieAdverses << "\n\tPillz : " << pillzAdverses << "\n\n";
 	
 	return res.str();
 }
@@ -233,12 +232,12 @@ void affichageDesVictoires()
 {
     char afficher = 0;
 
-    cout << "\nAfficher les victoires ? (o/n) : ";
+    cout << "\nDisplay computed results ? (" << YES_CHAR << "/" << NO_CHAR << ") : ";
 
-    while(afficher != 'o' && afficher != 'n')
-       scanf("%c", &afficher);
+    while(afficher != YES_CHAR && afficher != NO_CHAR)
+       cin >> afficher;
 
-    if (afficher == 'o')
+    if (afficher == YES_CHAR)
     {
         cout << "\n\n\n";
         for (int j = 0 ; j < 4 ; j++)
@@ -281,18 +280,18 @@ void quiCommenceSelonLesEtoiles()
         {//chouette, on a autant d'etoiles...
             do
             {//mais alors qui a commencé?
-                cout << "Qui commence ? 1 si c'est ton ennemi qui commence, 0 si c'est toi\n";
-                scanf("%d", &repJoueur);
+                cout << "Who starts ? Type 1 if the enemy starts, 0 if you do" << endl;
+                cin >> repJoueur;
 
                 if (repJoueur != 0 && repJoueur != 1)
-                    cout << "\nAh, ah, tres drole...\n";
+                    cout << endl << "Now, that's hilarious..." << endl;
             }while (repJoueur != 0 && repJoueur != 1);
 
             ennemiCommence = (repJoueur == 1);
         }
 }
 
-void whatAboutPvr(PouvoirDeCarte pvr)
+void whatAboutAbility(CardAbility pvr)
 {
     if (pvr.condition == SUPPORT)
         cout << "(support) ";
@@ -301,120 +300,78 @@ void whatAboutPvr(PouvoirDeCarte pvr)
         cout << "Courage : ";
 
     if (pvr.condition == CONFIANCE)
-        cout << "Confiance : ";
+        cout << "Confidence : ";
 
     if (pvr.condition == REVANCHE)
-        cout << "Revanche : ";
+        cout << "Revenge : ";
 
     if (pvr.condition == EN_CAS_DE_STOP)
         cout << "Stop : ";
 
     if (pvr.condition == DEFAITE)
-        cout << "Defaite : ";
+        cout << "Defeat : ";
 
     if (pvr.type == AUGMENTER_ATTAQUE)
-        printf("+%d a l'attaque", pvr.modificateur);
+        printf("+%d to attack", pvr.modificateur);
 
     if (pvr.type == DIMINUER_ATTAQUE)
-        printf("%d a l'attaque adverse, min. %d", pvr.modificateur, pvr.minimum);
+        printf("%d to opponent attack, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == AUGMENTER_PUISSANCE)
-        printf("+%d a la puissance", pvr.modificateur);
+        printf("+%d to power", pvr.modificateur);
 
     if (pvr.type == DIMINUER_PUISSANCE)
-        printf("%d a la puissance adverse, min. %d", pvr.modificateur, pvr.minimum);
+        printf("%d to opponent power, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == AUGMENTER_DEGATS)
-        printf("+%d aux degats", pvr.modificateur);
+        printf("+%d to damage", pvr.modificateur);
 
     if (pvr.type == COPIER_PUISSANCE)
-        cout << "Puissance = puissance adverse";
+        cout << "Power = opponent power";
 
     if (pvr.type == COPIER_DEGATS)
-        cout << "Degats = Degats adverses";
+        cout << "Damage = opponent damage";
 
     if (pvr.type == DIMINUER_DEGATS)
-        printf("%d aux degats adverses, min. %d", pvr.modificateur, pvr.minimum);
+        printf("%d to opponent damage, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == PROTECTION_BONUS)
-        cout << "Protection bonus";
+        cout << "Protect bonus";
 
     if (pvr.type == STOP_BONUS)
         cout << "Stop bonus";
 
     if (pvr.type == STOP_POUVOIR)
-        cout << "Stop pouvoir";
+        cout << "Stop power";
 
     if (pvr.type == PERTE_PILLZ)
         printf("%d pillz, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == PERTE_VIE)
-        printf("%d vie, min. %d", pvr.modificateur, pvr.minimum);
+        printf("%d health, min. %d", pvr.modificateur, pvr.minimum);
 
     if (pvr.type == GAIN_PILLZ)
         printf("+%d pillz", pvr.modificateur);
 
     if (pvr.type == GAIN_VIE)
-        printf("+%d vie", pvr.modificateur);
+        printf("+%d health", pvr.modificateur);
 
     if (pvr.type == POISON)
         printf("Poison %d, min. %d", pvr.modificateur, pvr.minimum);
 
-    if (pvr.type == NEANT)
-        cout << "Aucun";
-}
-
-void whatAboutbn(BonusDeCarte bn)
-{
-    if (bn.type == AUGMENTER_ATTAQUE)
-        printf("+%d a l'attaque", bn.modificateur);
-
-    if (bn.type == DIMINUER_ATTAQUE)
-        printf("%d a l'attaque adverse, min. %d", bn.modificateur, bn.minimum);
-
-    if (bn.type == AUGMENTER_PUISSANCE)
-        printf("+%d a la puissance", bn.modificateur);
-
-    if (bn.type == DIMINUER_PUISSANCE)
-        printf("%d a la puissance adverse, min. %d", bn.modificateur, bn.minimum);
-
-    if (bn.type == AUGMENTER_DEGATS)
-        printf("+%d aux degats", bn.modificateur);
-
-    if (bn.type == DIMINUER_DEGATS)
-        printf("%d aux degats adverses, min. %d", bn.modificateur, bn.minimum);
-
-    if (bn.type == STOP_BONUS)
-        cout << "Stop bonus";
-
-    if (bn.type == STOP_POUVOIR)
-        cout << "Stop pouvoir";
-
-    if (bn.type == PROTECTION_POUVOIR)
-        cout << "Protection pouvoir";
-
-    if (bn.type == PERTE_VIE)
-        printf("%d vie, min. %d", bn.modificateur, bn.minimum);
-
-    if (bn.type == GAIN_VIE)
-        printf("+%d vie", bn.modificateur);
-
-    if (bn.type == POISON)
-        printf("Poison %d, min. %d", bn.modificateur, bn.minimum);
-
-    if (bn.type == NEANT)
-        cout << "Aucun bonus";
+    if (pvr.type == NOTHING)
+        cout << "None";
 }
 
 void whatAboutPersos(Carte cards[4])
 {
     for (int i = 0 ; i < 4 ; i++)
         {
-            cout << endl << endl << cards[i].nom << " : " << cards[i].nombreDEtoiles << " etoiles des " << cards[i].clan << "." << endl << "Puissance : " << cards[i].puissance << "\tDegats : " << cards[i].degatsDeBase << endl << "Pouvoir : ";
-            whatAboutPvr(cards[i].pouvoir);
+            cout << endl << endl << cards[i].nom << " : " << cards[i].nombreDEtoiles << " star from " << cards[i].clan << "." << endl << "Power : " << cards[i].puissance << "\tDamage : " << cards[i].degatsDeBase << endl << "Ability : ";
+            whatAboutAbility(cards[i].pouvoir);
 
             cout << endl << "Bonus : ";
-            whatAboutbn(cards[i].bonus);
+            whatAboutAbility(cards[i].bonus);
         }
     cout << "\n\n\n\n\n";
 }

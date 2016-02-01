@@ -12,37 +12,30 @@
 
 using std::string;
 
-enum {NEANT, STOP_BONUS, STOP_POUVOIR, PROTECTION_POUVOIR, PROTECTION_BONUS,
-        AUGMENTER_PUISSANCE, DIMINUER_PUISSANCE, AUGMENTER_DEGATS, DIMINUER_DEGATS, AUGMENTER_ATTAQUE, DIMINUER_ATTAQUE,
-        VAINQUEUR, PERDANT, EGALITE, SUPPORT, POISON, GAIN_VIE, PERTE_VIE, GAIN_PILLZ, PERTE_PILLZ, EN_CAS_DE_STOP, COURAGE,
-        REVANCHE, CONFIANCE, COPIER_DEGATS, COPIER_PUISSANCE, DEFAITE, CONTRECOUP, PROTECTION_PUISSANCE, PROTECTION_DEGATS};//fixit, recup pillz, pv/degats, copie pouvoir et bonus...
-//FIXME typer l'enum et ses utilisations
+enum AbilityType {NOTHING, STOP_BONUS, STOP_POUVOIR, PROTECTION_POUVOIR, PROTECTION_BONUS,
+        AUGMENTER_PUISSANCE, DIMINUER_PUISSANCE, AUGMENTER_DEGATS, DIMINUER_DEGATS, AUGMENTER_ATTAQUE, DIMINUER_ATTAQUE, POISON, GAIN_VIE, PERTE_VIE, GAIN_PILLZ, PERTE_PILLZ, COPIER_DEGATS, COPIER_PUISSANCE, PROTECTION_PUISSANCE, PROTECTION_DEGATS};
+//TODO fixit, recup pillz, pv/degats, copie pouvoir et bonus...
+enum AbilityCondition {NO_CONDITION, SUPPORT, EN_CAS_DE_STOP, COURAGE, REVANCHE, CONFIANCE, DEFAITE, CONTRECOUP};
 
-typedef struct BonusDeCarte BonusDeCarte;
-struct BonusDeCarte
+enum DuelResult {NOT_YET_KNOWN, VAINQUEUR, PERDANT, EGALITE};
+        
+
+
+typedef struct CardAbility CardAbility;
+struct CardAbility
 {
     int minimum;
     int modificateur;
-    int type;
-};
-
-
-
-typedef struct PouvoirDeCarte PouvoirDeCarte;
-struct PouvoirDeCarte
-{
-    int minimum;
-    int modificateur;
-    int type;
-    int condition;
+    AbilityType type;
+    AbilityCondition condition;
 };
 
 
 typedef struct Carte Carte;
 struct Carte
 {
-    PouvoirDeCarte pouvoir;
-    BonusDeCarte bonus;
+    CardAbility pouvoir;
+    CardAbility bonus;
     int puissance;
     int puissanceTemporaire;
     int degatsDeBase;
@@ -59,10 +52,14 @@ struct Carte
     int defaitesAvecXpillzEtFury[10];
     int egalitesAvecXPillz[13];
     int egalitesAvecXPillzEtFury[10];
-    int combatAvecXPillzContreYAvecZpillz[13][4][13];
-    int guessedScore[13] = {0};
+    DuelResult combatAvecXPillzContreYAvecZpillz[13][4][13];
+    int guessedScore[13] = {0};//FIXME still here when not using it : problem ?
     int guessedScoreFury[10] = {0};
     string nom;
     string clan;
 };
 
+
+const string ALREADY_PLAYED_STRING = "This card has already been played !";
+const char YES_CHAR = 'y';
+const char NO_CHAR  = 'n';  

@@ -39,11 +39,12 @@ char equivalentMinuscule(char lettreRecue)
 }
 
 
-void affecterBonus(Carte *card, int type, int modificateur, int minimum)
+void affecterBonus(Carte *card, AbilityType type, int modificateur, int minimum)
 {
     card->bonus.type = type;
     card->bonus.modificateur = modificateur;
     card->bonus.minimum = minimum;
+    card->bonus.condition = NO_CONDITION;
 }
 
 void definirBonus(Carte *card, int compteur)
@@ -109,7 +110,7 @@ void definirBonus(Carte *card, int compteur)
         affecterBonus(card, AUGMENTER_ATTAQUE, 3 * compteur, 0);
 
     else
-        erreur(card->clan + " : Clan encore inconnu. A definir dans lectureFichiers/definirBonus()\n");
+        erreur(card->clan + " : Clan is unknown. Must be defined in lectureFichiers/definirBonus()\n");
 }
 
 void miseEnPlaceDesBonus()
@@ -137,11 +138,89 @@ void miseEnPlaceDesBonusPourUnCamp(Carte equipe[4])
 
         else
         {
-            equipe[i].bonus.type = NEANT;
-            equipe[i].bonus.modificateur = NEANT;
-            equipe[i].bonus.minimum = NEANT;
+            equipe[i].bonus.type = NOTHING;
+            equipe[i].bonus.modificateur = 0;
+            equipe[i].bonus.minimum = 0;
         }
     }
+}
+
+AbilityType stringToAbilityType(string s) 
+{
+    AbilityType res;
+
+    if (s == "NOTHING")
+        res = NOTHING;
+    else if (s == "STOP_BONUS")
+        res = STOP_BONUS;
+    else if (s == "STOP_POUVOIR")
+        res = STOP_POUVOIR;
+    else if (s == "PROTECTION_POUVOIR")
+        res = PROTECTION_POUVOIR;
+    else if (s == "PROTECTION_BONUS")
+        res = PROTECTION_BONUS;
+    else if (s == "AUGMENTER_PUISSANCE")
+        res = AUGMENTER_PUISSANCE;
+    else if (s == "DIMINUER_PUISSANCE")
+        res = DIMINUER_PUISSANCE;
+    else if (s == "AUGMENTER_DEGATS")
+        res = AUGMENTER_DEGATS;
+    else if (s == "DIMINUER_DEGATS")
+        res = DIMINUER_DEGATS;
+    else if (s == "AUGMENTER_ATTAQUE")
+        res = AUGMENTER_ATTAQUE;
+    else if (s == "DIMINUER_ATTAQUE")
+        res = DIMINUER_ATTAQUE;
+    else if (s == "POISON")
+        res = POISON;
+    else if (s == "GAIN_VIE")
+        res = GAIN_VIE;
+    else if (s == "PERTE_VIE")
+        res = PERTE_VIE;
+    else if (s == "GAIN_PILLZ")
+        res = GAIN_PILLZ;
+    else if (s == "PERTE_PILLZ")
+        res = PERTE_PILLZ;
+    else if (s == "COPIER_DEGATS")
+        res = COPIER_DEGATS;
+    else if (s == "COPIER_PUISSANCE")
+        res = COPIER_PUISSANCE;
+    else if (s == "PROTECTION_PUISSANCE")
+        res = PROTECTION_PUISSANCE;
+    else if (s == "PROTECTION_DEGATS")
+        res = PROTECTION_DEGATS;
+    else {
+        res = NOTHING;
+        erreur(s + " is not known as any ability type");
+    }
+    return res;
+}
+
+
+AbilityCondition stringToAbilityCondition(string s) 
+{
+    AbilityCondition res;
+    if (s == "NO_CONDITION")
+        res = NO_CONDITION;
+    else if (s == "SUPPORT")
+        res = SUPPORT;
+    else if (s == "EN_CAS_DE_STOP")
+        res = EN_CAS_DE_STOP;
+    else if (s == "COURAGE")
+        res = COURAGE;
+    else if (s == "REVANCHE")
+        res = REVANCHE;
+    else if (s == "CONFIANCE")
+        res = CONFIANCE;
+    else if (s == "DEFAITE")
+        res = DEFAITE;
+    else if (s == "CONTRECOUP")
+        res = CONTRECOUP;
+    else {
+        erreur(s + " is not known as any condition type");
+        res = NO_CONDITION;
+    } 
+    return res;
 }
 
 bool rechercheCarte(string nomCherche, Carte *card)
@@ -155,8 +234,8 @@ bool rechercheCarte(string nomCherche, Carte *card)
         exit(EXIT_FAILURE);
     }
 
-    int pType, pMod, pMin, pCond, puissance, degats, etoiles;
-    string nom, clan;
+    int pMod, pMin, puissance, degats, etoiles;
+    string nom, clan, pType, pCond;
 
     while (file >> pType >> pMod >> pMin >> pCond >> puissance >> degats >> etoiles >> nom >> clan)
     {
@@ -170,10 +249,10 @@ bool rechercheCarte(string nomCherche, Carte *card)
         {
             cout << "Card found : " << nom << endl;
 
-            card->pouvoir.type = pType;
+            card->pouvoir.type = stringToAbilityType(pType);
             card->pouvoir.modificateur = pMod;
             card->pouvoir.minimum = pMin;
-            card->pouvoir.condition = pCond;
+            card->pouvoir.condition = stringToAbilityCondition(pCond);
             card->puissance = puissance;
             card->degatsDeBase = degats;
             card->nombreDEtoiles = etoiles;

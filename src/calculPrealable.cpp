@@ -9,7 +9,7 @@
 bool pouvoirActif(Carte carteATester, Carte adversaire)//ATTENTION !!! qu'on se le dise : pouvoir actif veut certes dire non stoppe, mais aussi qu'il est different de stop bonus/pouvoir, protection et autres !!! D'accord le nom de la fonction ne le laisse pas deviner, mais vas-y trouve moi un nom qui resume ce commentaire en quelques mots...
 {//reverifier cette fonction de temps en temps ne peut pas faire de mal, elle est compliquee...
     bool res = false;
-    if (carteATester.pouvoir.type != STOP_BONUS && carteATester.pouvoir.type != STOP_POUVOIR && carteATester.pouvoir.type != PROTECTION_BONUS && carteATester.pouvoir.type != NEANT)
+    if (carteATester.pouvoir.type != STOP_BONUS && carteATester.pouvoir.type != STOP_POUVOIR && carteATester.pouvoir.type != PROTECTION_BONUS && carteATester.pouvoir.type != NOTHING)
         {
             if(adversaire.pouvoir.type == STOP_POUVOIR)//epsp
                 {
@@ -35,7 +35,7 @@ bool pouvoirActif(Carte carteATester, Carte adversaire)//ATTENTION !!! qu'on se 
 bool bonusActif(Carte carteATester, Carte adversaire)//ATTENTION !!! qu'on se le dise : bonus actif veut certes dire non stoppe, mais aussi qu'il est different de stop bonus/pouvoir, protection et autres !!! D'accord le nom de la fonction ne le laisse pas deviner, mais vas-y trouve moi un nom qui resume ce commentaire en quelques mots...
 {
     bool res = false;
-    if (carteATester.bonus.type != STOP_BONUS && carteATester.bonus.type != STOP_POUVOIR && carteATester.bonus.type != PROTECTION_POUVOIR && carteATester.bonus.type != NEANT)
+    if (carteATester.bonus.type != STOP_BONUS && carteATester.bonus.type != STOP_POUVOIR && carteATester.bonus.type != PROTECTION_POUVOIR && carteATester.bonus.type != NOTHING)
         {
             if (adversaire.pouvoir.type == STOP_BONUS)//epsb
                 {

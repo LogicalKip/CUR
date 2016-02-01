@@ -1,6 +1,3 @@
-
-
-
 #include "../include/main.hpp"
 #include "../include/constantes.hpp"
 #include "../include/autresFonctions.hpp"

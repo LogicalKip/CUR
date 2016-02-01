@@ -1,6 +1,10 @@
 #pragma once
 
 
+void quit();
+
+string getOrdinal(int n);
+
 int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round);
 
 void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFautUtiliserLaFury);

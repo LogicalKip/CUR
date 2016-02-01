@@ -40,9 +40,11 @@ frozn
 verifier les conditions pour passer aux autres fonctions, les victoires++ et les arguments envoyes, j'ai supprime plein de conditions pour que le programme aille plus vite. Avec ce genre de pouvoirs, on peut gagner dans des situations totalement farfelues... pour l'instant, le programme suit un raisonnement tres simpliste...
 
 --------EVENTUELLEMENT--------
-accelerer encore les rounds 1 ( il y a de petites optimisations simples proposées en commentaires)
+accelerer encore les rounds 1 ( il y a de petites optimisations simples proposées en commentaires), sinon prog dynamique avec un hash de l'état courant
 virer les includes inutiles
-printf, scanf -> cout, cin
+const et ref quand c'est possible
+endl au lieu de \n
+unsigned int ?
 leaders
 pouvoir choisir entre égalité à coup sûr et continuer le calcul normalement
 ne pas demander "qui?" si les 4 sont la même carte
@@ -87,7 +89,7 @@ int main(void)
                     for (int k = 0 ; k < pillz ; k++)
                         {
                             for (int l = 0 ; l < pillzAdverses ; l++)
-                                carteAlliee[i].combatAvecXPillzContreYAvecZpillz[k][j][l] = NEANT;
+                                carteAlliee[i].combatAvecXPillzContreYAvecZpillz[k][j][l] = NOT_YET_KNOWN;
                         }
                 }
         }

@@ -26,4 +26,8 @@ void multiplicationParSupport();
 
 void definirBonus(Carte *card, int compteur);
 
-void affecterBonus(Carte *card, int type, int modificateur, int minimum);
+void affecterBonus(Carte *card, AbilityType type, int modificateur, int minimum);
+
+AbilityType stringToAbilityType(string s);
+
+AbilityCondition stringToAbilityCondition(string s);

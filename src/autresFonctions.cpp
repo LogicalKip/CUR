@@ -11,8 +11,32 @@
 using std::cin;
 using std::cout;
 using std::string;
+using std::to_string;
 using std::endl;
 
+void quit() 
+{
+    cout << endl << endl << "Press Enter to quit.";
+    getchar();
+    exit(EXIT_SUCCESS);
+}
+
+string getOrdinal(int n)
+{
+    switch (n) 
+    {
+        case 1:
+            return "first";
+        case 2:
+            return "second";
+        case 3:
+            return "third";
+        case 4:
+            return "fourth";
+        default:
+            return to_string(n) + "th";
+    }
+}
 
 int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
 {
@@ -22,10 +46,7 @@ int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
 
     do
     {
-        if (round == 1)
-            cout << "\n\n\nQuelle carte envoie l'ennemi pour le 1er round ? --> ";
-        else
-            cout << "\n\n\nQuelle carte envoie l'ennemi pour le " << round << "eme round ? --> ";
+        cout << "\n\n\nWhat card is the enemy sending for the " << getOrdinal(round) << " round ? --> ";
 
         cin >> nomDeLaCarte;
 
@@ -43,10 +64,10 @@ int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
         }
 
         if (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant)
-            cout << "\nAh je ne pense pas, non !\n";
+            cout << "\nI don't think so !\n";
 
         else if (carteEnnemie[carteEnvoyeeEnnemie].utiliseeACoupSur && !nomInexistant)
-            cout << "\nCette carte a deja ete utilisee !\n";
+            cout << endl << ALREADY_PLAYED_STRING << endl;
     }
     while (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || carteEnnemie[carteEnvoyeeEnnemie].utiliseeACoupSur);
 
@@ -65,11 +86,7 @@ void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnv
     {//test de veracite
         dejaUtilisee = false;
         nomInexistant = false;
-        if (round == 1)
-            cout << "Alors, finalement qui a-t-il envoye lors de ce 1er round ? : ";
-
-        else
-            cout << "Alors, finalement qui a-t-il envoye lors de ce " << round << "eme round ? : ";//pour le 4eme round il a pas le choix...
+        cout << "In the end, which card did the enemy send for the " << getOrdinal(round) << " round ? : ";//FIXME pour le 4eme round il a pas le choix...
 
         cin >> nomDeLaCarte;
 
@@ -94,10 +111,10 @@ void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnv
         }
 
         if (carteEnnemieEnReponse < 0 || carteEnnemieEnReponse > 3 || (nomInexistant && !dejaUtilisee))
-            cout << "\nEuuh.. Ou pas ?\n";
+            cout << "\nUh... Nope ?\n";
 
         else if (dejaUtilisee)
-            cout << "\nCette carte a deja ete utilisee !\n";
+            cout << endl << ALREADY_PLAYED_STRING << endl;
     }
     while (carteEnnemie[carteEnnemieEnReponse].utiliseeACoupSur || carteEnnemieEnReponse < 0 || carteEnnemieEnReponse > 3 || dejaUtilisee || nomInexistant);
 
@@ -117,11 +134,11 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
     {
         do
         {
-            cout << "\nCombien de pillz sur la carte ? ";
+            cout << "\nHow many pillz on the card ? ";
             cin >> pillzMis;
 
             if (pillzMis > pillzAdverses || pillzMis < 0)
-                cout << "C'est impossible...\n";
+                cout << "That's impossible...\n";
         }
         while (pillzMis > pillzAdverses || pillzMis < 0);
     }
@@ -131,15 +148,15 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
 
     if (pillzAdverses - pillzMis >= 3)
     {
-        cout << "\nAvec la fury ? (o/n) : ";
+        cout << endl << "Using fury ? (" << YES_CHAR << "/" << NO_CHAR << ") : ";
 
-        while(furyOuPas != 'o' && furyOuPas != 'n')
+        while(furyOuPas != YES_CHAR && furyOuPas != NO_CHAR)
         {
             cin >> furyOuPas;
             furyOuPas = equivalentMinuscule(furyOuPas);
         }
 
-        *ennemiUtiliseFury = (furyOuPas == 'o');
+        *ennemiUtiliseFury = (furyOuPas == YES_CHAR);
     }
 
     else
@@ -274,9 +291,8 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
 
     if (defaiteACoupSur)
     {
-        cout << "\nJe suis desole... Tu n'as pas la moindre chance de t'en sortir...\n\n\n\nSauf si l'autre a une coupure de courant !\nAppuie sur Entree pour quitter\n";
-        getchar();
-        exit(0);
+        cout << endl << "I'm sorry... There is absolutely now way to win..." << endl << endl << "Unless the other guy gets a power outage !";
+        quit();
     }
     else
     {
@@ -370,7 +386,7 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     bool ilFautUtiliserLaFury = false, ennemiUtiliseFury = false;
 
     (*round)++;
-    cout << "\n\nLe " << *round << "eme round va commencer\n";
+    cout << "\n\nThe " << getOrdinal(*round) << " round is about to begin.\n";
 
     cout << whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses);
 
@@ -380,8 +396,7 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
         carteCourageEnnemie = carteEnvoyeeParLEnnemiEnCourage(&carteQuIlEnvoie, *round);
 
     calculerRound(*round, *pointsDeVie, *pointsDeVieAdverses, *pillz, *pillzAdverses, true, carteCourageEnnemie, dernierRoundACalculer);
-    cout << "Calcul termine.\n";
-
+    cout << "Calcul complete.\n";
 
 	if (dernierRoundACalculer == 4) { // Decided to brute force all 4 rounds
 		affichageDesVictoires();
@@ -398,20 +413,23 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
 					p = j;
 					f = false;
 				}	
-				if (!carteAlliee[i].utiliseeACoupSur && carteAlliee[i].guessedScoreFury[j] > max) {
-					max = carteAlliee[i].guessedScore[j];
-					c = i;
-					p = j;
-					f = true;
-				}		
+                if (j >= 3) {
+                    int furyScore = carteAlliee[i].guessedScoreFury[j - 3];
+    				if (!carteAlliee[i].utiliseeACoupSur && furyScore > max) {
+    					max = carteAlliee[i].guessedScoreFury[j];
+    					c = i;
+    					p = j;
+    					f = true;
+    				}		
+                }
 			}
 		}
 		
-		cout << "Il faut probablement envoyer " << carteAlliee[c].nom << " avec " << p << " pillz";
+		cout << "You should probably use " << carteAlliee[c].nom << " with " << p << " pillz";
 		if (f) {
-			cout << " et la fury (heuristique = " << carteAlliee[c].guessedScoreFury[p] << ")";//FIXME m'a déjà proposé 10 pillz et la fury
+			cout << " and fury (heuristic = " << carteAlliee[c].guessedScoreFury[p] << ")";
 		} else {	
-			cout << " (heuristique = " << carteAlliee[c].guessedScore[p] << ")";
+			cout << " (heuristic = " << carteAlliee[c].guessedScore[p] << ")";
 		}
 		
 		carteQueJEnvoie = c;
@@ -422,13 +440,13 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
     if (courageEnnemi)
     {
         if (*pillzAdverses > 0)
-            cout << "\nCa y est, c'est fait ?\nDis-moi combien de pillz avait mis l'ennemi sur sa carte des que tu peux.\n";
+            cout << endl << "Done ?" << endl << endl << "Please indicate how many pillz the enemy used as soon as possible." << endl;
 
         ilAvaitMisCombienDePillz(*pillzAdverses, &pillzQuIlUtilise, &ennemiUtiliseFury);
     }
     else
     {
-        cout << "\nCa y est, c'est fait ? Dis-moi ce qu'a fait l'ennemi en reponse des que tu peux.\n";
+        cout << endl << "Done ?" << endl << endl << "Please indicate what the enemy did as soon as possible." << endl;
         reponseEnnemie(pillzAdverses, &pillzQuIlUtilise, &carteQuIlEnvoie, &ennemiUtiliseFury, *round);
     }
 
