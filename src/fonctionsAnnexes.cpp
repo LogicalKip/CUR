@@ -30,13 +30,11 @@ using std::stringstream;
 
 void erreur(string message)
 {
-    cerr << endl << endl << "/!\\Something that should never happen in the program actually happened (:O) : " << message << endl 
-    << "Press Enter to quit" << endl;
-    getchar();
-    exit(0);
+    cerr << endl << endl << "/!\\Something that should never happen in the program actually happened (:O) : " << message << endl;
+    quit();
 }
 
-void changerMajuscules(string& nom)
+void normalizeCasing(string& nom)//TODO replace spaces with _
 {
     for (unsigned int i = 0 ; i < nom.length() ; i++)
         nom[i] = equivalentMinuscule(nom[i]);
@@ -59,10 +57,10 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
 
     do
     {//qui l'ennemi a-t-il envoye?
-        cout << "\nQuelle carte a envoye ton adversaire au premier round ? ";
+        cout << endl << "Quelle carte a envoye ton adversaire au premier round ? ";
         cin >> nomEnnemi;
 
-        changerMajuscules(nomEnnemi);
+        normalizeCasing(nomEnnemi);
 
         for (int i = 0 ; i < 4 ; i++)
         {
@@ -78,7 +76,7 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
         }
 
         if (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant)
-            cout << "\nEuh.... Ou pas?\n";
+            cout << endl << "Euh.... Ou pas?" << endl;
     }
     while (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant);
 
@@ -88,10 +86,10 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
 
     do
     {//qui l'utilisateur a-t-il envoye?
-        cout << "\n\nEt toi, tu as envoye quelle carte au premier round ? ";
+        cout << endl << endl << "Et toi, tu as envoye quelle carte au premier round ? ";
         cin >> nomAllie;
 
-        changerMajuscules(nomAllie);
+        normalizeCasing(nomAllie);
 
         for (int i = 0 ; i < 4 ; i++)
         {
@@ -107,7 +105,7 @@ void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *p
         }
 
         if (carteEnvoyeeAlliee < 0 || carteEnvoyeeAlliee > 3 || nomInexistant)
-            cout << "\nNon, franchement...\n";
+            cout << endl << "Non, franchement..." << endl;
     }
     while (carteEnvoyeeAlliee < 0 || carteEnvoyeeAlliee > 3 || nomInexistant);
 
@@ -163,7 +161,7 @@ void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
 {
     if (pointsDeVie < 1)
         {
-            cout << endl << "Sorry... I did what I could, but fate has failed you...\n\n\n... unless it's the programmer ^^." << endl << endl << "Better luck next time !" << endl;
+            cout << endl << "Sorry... I did what I could, but fate has failed you..." << endl << endl << endl << "... unless it's the programmer ^^." << endl << endl << "Better luck next time !" << endl;
         }
 
     if (pointsDeVieAdverses < 1)
@@ -184,7 +182,7 @@ void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie)
         }
 }
 
-void remiseAZero()
+void reset()
 {
     for (int i = 0 ; i < 4 ; i++)
         {// aucune carte n'est utilisee !! Ou alors ca se saura grâce a utiliseeACoupSur. Ici ce sont les variables utilisees dans les boucles (qui servent a eviter de calculer une carte dont on considere qu'elle a ete utilisee lors des rounds precedents)
@@ -223,49 +221,48 @@ string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int point
 {
 	stringstream res;
 	
-	res << "\n\nYou :\n\tHealth : " << pointsDeVie << "\n\tPillz : " << pillz << "\n\nThe opponent :\n\tHealth : " << pointsDeVieAdverses << "\n\tPillz : " << pillzAdverses << "\n\n";
+	res << endl << endl << "You :" << endl << "\tHealth : " << pointsDeVie << endl << "\tPillz : " << pillz << endl << endl << "The opponent :" << endl <<        "\tHealth : " << pointsDeVieAdverses << endl << "\tPillz : " << pillzAdverses << endl << endl;
 	
 	return res.str();
 }
 
-void affichageDesVictoires()
+void displayComputedStats(int pillzRestant)
 {
     char afficher = 0;
 
-    cout << "\nDisplay computed results ? (" << YES_CHAR << "/" << NO_CHAR << ") : ";
+    cout << endl << "Display computed results ? (" << YES_CHAR << "/" << NO_CHAR << ") : ";
 
     while(afficher != YES_CHAR && afficher != NO_CHAR)
        cin >> afficher;
 
     if (afficher == YES_CHAR)
     {
-        cout << "\n\n\n";
+        cout << endl << endl << endl;
         for (int j = 0 ; j < 4 ; j++)
-            {//affichage des victoires histoire de verifier
-                if (! carteAlliee[j].utiliseeACoupSur)
+        {//affichage des victoires histoire de verifier
+            if (! carteAlliee[j].utiliseeACoupSur)
+                {
+                    cout << carteAlliee[j].nom << "'s victories :" << endl;
+
+                    for (int i = 0 ; i <= pillzRestant ; i++)
                     {
-                        cout << "Victoires de " << carteAlliee[j].nom << " :" << endl;
+                        cout << "\t";
+                        if (i < 10)
+                            cout << " ";
 
-                        for (int i = 0 ; i <= 12 ; i++)
-                        {
-                            cout << "\t";
-                            if (i < 10)
-                                cout << " ";
+                        cout << i << " pillz : V=" << carteAlliee[j].victoiresAvecXpillzEntreCrochets[i] << " E=" <<carteAlliee[j].egalitesAvecXPillz[i] << " D=" << carteAlliee[j].defaitesAvecXpillz[i];
 
-                            printf("%d pillz : V=%d E=%d D=%d", i, carteAlliee[j].victoiresAvecXpillzEntreCrochets[i], carteAlliee[j].egalitesAvecXPillz[i], carteAlliee[j].defaitesAvecXpillz[i]);
-
-                            if (i <= 9)
-                                printf("\n\t %d pillz et fury : V=%d E=%d D=%d", i, carteAlliee[j].victoiresAvecXpillzEtFury[i], carteAlliee[j].egalitesAvecXPillzEtFury[i], carteAlliee[j].defaitesAvecXpillzEtFury[i]);
-
-                            cout << "\n\n";
-                        }
-                        cout << "\n\n\n";
+                        if (pillzRestant - i >= 3)
+                            cout << endl << "\t " << i << " pillz and fury : V=" << carteAlliee[j].victoiresAvecXpillzEtFury[i] << " E=" <<carteAlliee[j].egalitesAvecXPillzEtFury[i] << " D=" << carteAlliee[j].defaitesAvecXpillzEtFury[i];
+                        cout << endl << endl;
                     }
-            }
+                    cout << endl << endl << endl;
+                }
+        }
     }
 }
 
-void quiCommenceSelonLesEtoiles()
+void findOutFirstPlayer()
 {
     int mesEtoiles = carteAlliee[0].nombreDEtoiles + carteAlliee[1].nombreDEtoiles + carteAlliee[2].nombreDEtoiles + carteAlliee[3].nombreDEtoiles;
     int sesEtoiles = carteEnnemie[0].nombreDEtoiles + carteEnnemie[1].nombreDEtoiles + carteEnnemie[2].nombreDEtoiles + carteEnnemie[3].nombreDEtoiles;
@@ -277,18 +274,18 @@ void quiCommenceSelonLesEtoiles()
         ennemiCommence = false;//il a moins d'etoiles que moi : je commence
 
     else
-        {//chouette, on a autant d'etoiles...
-            do
-            {//mais alors qui a commencé?
-                cout << "Who starts ? Type 1 if the enemy starts, 0 if you do" << endl;
-                cin >> repJoueur;
+    {
+        do
+        {// Ask who goes first
+            cout << "Who starts ? Enter 1 if the enemy starts, 0 if you do" << endl;
+            cin >> repJoueur;
 
-                if (repJoueur != 0 && repJoueur != 1)
-                    cout << endl << "Now, that's hilarious..." << endl;
-            }while (repJoueur != 0 && repJoueur != 1);
+            if (repJoueur != 0 && repJoueur != 1)
+                cout << endl << "Now, that's hilarious..." << endl;
+        }while (repJoueur != 0 && repJoueur != 1);
 
-            ennemiCommence = (repJoueur == 1);
-        }
+        ennemiCommence = (repJoueur == 1);
+    }
 }
 
 void whatAboutAbility(CardAbility pvr)
@@ -363,7 +360,7 @@ void whatAboutAbility(CardAbility pvr)
         cout << "None";
 }
 
-void whatAboutPersos(Carte cards[4])
+void whatAboutCards(Carte cards[4])
 {
     for (int i = 0 ; i < 4 ; i++)
         {
@@ -375,6 +372,3 @@ void whatAboutPersos(Carte cards[4])
         }
     cout << "\n\n\n\n\n";
 }
-
-
-

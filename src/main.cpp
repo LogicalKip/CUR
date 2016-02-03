@@ -9,19 +9,14 @@
 
 using std::cout;
 
-/// /// Si l'ennemi commence le round, il ne faut tester que cette carte là !
-///on ne peut calculer que les furys de pillzrestants-3 ! quand j'ai 4 pillz il me dit : avec 3 pillz+fury = 76 victoires...
 /// a changer de partout si pas deja fait ! "faire si le pouvoir n'est pas stoppé ET qu'il n'est pas de type en cas de stop"....
 ///mettre le coup du kbhit pour le "a mis la fury ?" et affichage victoires
 
-// n'affiche pas le meme pouvoir pour thormund chez ennemi si un des 4 != junta - T'es sur?
+// n'affiche pas le meme pouvoir pour thormund chez ennemi si un des 4 != junta <-- A verifier
 // petits problemes si pluseurs fois meme carte avec carteCourage
 // qui s'active en premier ? le poison ou le berzerk?
-// la variable nomInexistant se retrouve dans plusieurs fonctions. pas moyen de factoriser la vérification ?
-
 
 //on peut passer des pointeurs sur les grosses structures plutot que de les passer entierement. a faire plutôt dans les fonctions simples et appelées souvent
-//pas que dans ce fichier : partout ou il y a des paquets de lignes ABSOLUMENT identiques, on peut faire une fonction à la place. En particulier les cas d'"égalité" qui doublent le contenu.
 //est-ce qu'il y a des endroits ou on calcule plusieurs fois une même valeur, alors qu'on pourrait la stocker en mémoire?
 //pour aller plus vite : créer des variables (globales, probablement...) qui retiennent que le duo posséde des trucs qui touchent à la vie (ou aux pillz) (ou pas), on fera les modifs que si la variable vaut true
 //le calcul 1er tour OS+fury fera forcement moins de victoires au compteur qu'une sasha 2 pillz qui va, elle, aligner des victoires sur les 4 rounds.... comment y remédier? est-ce grave?
@@ -44,6 +39,7 @@ accelerer encore les rounds 1 ( il y a de petites optimisations simples proposée
 virer les includes inutiles
 const et ref quand c'est possible
 endl au lieu de \n
+factoriser les entrées utilisateurs
 unsigned int ?
 leaders
 pouvoir choisir entre égalité à coup sûr et continuer le calcul normalement
@@ -96,21 +92,18 @@ int main(void)
     calculDesDuels(pillz, pillzAdverses);
     calculDesDegats();
 
-    remiseAZero();//pour eviter les valeures farfelues...
+    reset();//pour eviter les valeures farfelues...
 
-    whatAboutPersos(carteAlliee);
-    whatAboutPersos(carteEnnemie);
+    whatAboutCards(carteAlliee);
+    whatAboutCards(carteEnnemie);
 
-    quiCommenceSelonLesEtoiles();
+    findOutFirstPlayer();
 
     processGame(pillz, pillzAdverses, pointsDeVie, pointsDeVieAdverses);
 //je crée ces variables dans le main pour quand on aura à demander des trucs qui n'ont rien a faire dans la fonction (ELO ou pas...), mieux vaut appeler des fonctions depuis le main.
 
     //je mets le programme en boucle ou on le relance a chaque fois? Il sera peut-être plus rapide la 2ème fois ? =D
-    cout << "\nPress Enter to quit\n";
-    getchar();
+    quit();
 
     return EXIT_SUCCESS;
 }
-
-

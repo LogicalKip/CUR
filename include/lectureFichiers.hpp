@@ -20,9 +20,9 @@ void miseEnPlaceDesBonusPourUnCamp(Carte equipe[4]);
 
 void lectureDesFichiers();
 
-bool rechercheCarte(string nomCherche, Carte * card);
+bool foundCard(string nomCherche, Carte * card);
 
-void multiplicationParSupport();
+void computeSupport();
 
 void definirBonus(Carte *card, int compteur);
 

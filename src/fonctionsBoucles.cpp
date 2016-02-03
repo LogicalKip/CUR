@@ -166,16 +166,6 @@ void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemi
     int pillzRestants, pillzEnnemisRestants;
     bool jeGagne = false;
     
-    if (nRound == dernierRoundACalculer+1) {
-    	if (furyUtilisee) {
-    		carteAlliee[persoTest].guessedScoreFury[pillzTest] 	+= oracle(pv, pillz, pvEnnemis, pillzEnnemis);
-    	} else {
-    		carteAlliee[persoTest].guessedScore[pillzTest]		+= oracle(pv, pillz, pvEnnemis, pillzEnnemis);
-    	}
-    	
-    	return;
-    }
-
     if (nRound == 5 || pvEnnemis <= 0 || pv <= 0) { // Combat terminé 
         if (pv <= 0 && pvEnnemis <= 0)
             rajouterEgalites();
@@ -187,6 +177,16 @@ void calculerRound(int nRound, int pv, int pvEnnemis, int pillz, int pillzEnnemi
             rajouterEgalites();
     }
     else {
+        if (nRound == dernierRoundACalculer+1) {
+            if (furyUtilisee) {
+                carteAlliee[persoTest].guessedScoreFury[pillzTest]  += oracle(pv, pillz, pvEnnemis, pillzEnnemis);
+            } else {
+                carteAlliee[persoTest].guessedScore[pillzTest]      += oracle(pv, pillz, pvEnnemis, pillzEnnemis);
+            }
+            
+            return;
+        }
+        
         for (int i = 0 ; i < 4 ; i++) { // Pour chaque carte alliée
             if (!carteAlliee[i].supposeeUtilisee && !carteAlliee[i].utiliseeACoupSur) { // ne continuer que si elle n'est pas supposée utilisée, ni pour de bon
                 if (determinQuiEstTeste)

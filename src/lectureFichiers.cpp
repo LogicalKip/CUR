@@ -223,7 +223,7 @@ AbilityCondition stringToAbilityCondition(string s)
     return res;
 }
 
-bool rechercheCarte(string nomCherche, Carte *card)
+bool foundCard(string nomCherche, Carte *card)
 {
     bool cardFound = false;
     ifstream file(CARDS_DB_FILENAME);//FIXME need to close/whatever the filestream ?
@@ -292,20 +292,16 @@ void lectureDesFichiers()
             if (i == 3)
                 nom = "no_nam";
 #else
-            if (i == 0)
-                cout << "\nQui est ta 1ere carte ? : ";
-            else
-                cout << "\nQui est ta " << i + 1 << "eme carte ? : ";
-
+            cout << endl << "What is your " << getOrdinal(i + 1) << " card ? : ";
             cin >> nom;
 #endif
 
-            changerMajuscules(nom);
+            normalizeCasing(nom);
         }
-        while (!rechercheCarte(nom, &carteAlliee[i]));
+        while (!foundCard(nom, &carteAlliee[i]));
     }
 
-    cout << "\n";
+    cout << endl;
 
     for (int i = 0 ; i < 4 ; i++)
     {
@@ -321,24 +317,20 @@ void lectureDesFichiers()
             if (i == 3)
                 nom = "yu_mei";
 #else
-            if (i == 0)
-                cout << "\nQui est la 1ere carte adverse ? : ";
-            else
-                cout << "\nQui est la " << i + 1 << "eme carte adverse ? : ";
-
+            cout << endl << "What is the opponent's " << getOrdinal(i+1) << " card ? : ";
             cin >> nom;
 #endif
-            changerMajuscules(nom);
+            normalizeCasing(nom);
         }
-        while (!rechercheCarte(nom, &carteEnnemie[i]));
+        while (!foundCard(nom, &carteEnnemie[i]));
     }
 
     miseEnPlaceDesBonus();
 
-    multiplicationParSupport();
+    computeSupport();
 }
 
-void multiplicationParSupport()
+void computeSupport()
 {
     for (int i = 0 ; i < 4 ; i++)
     {

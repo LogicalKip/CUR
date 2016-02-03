@@ -8,23 +8,23 @@
 
 using std::string;
 
-void changerMajuscules(string& nom);
+void normalizeCasing(string& nom);
 
 void testFinDeJeu(int pointsDeVieAdverses, int pointsDeVie);
 
 void effacerEcran();
 
-void remiseAZero();
+void reset();
 
 void whatHappenedRound1(int *pillz, int *pillzAdverses, int *pointsDeVie, int *pointsDeVieAdverses);
 
 string whatAboutPillzHP(int pillz, int pillzAdverses, int pointsDeVie, int pointsDeVieAdverses);
 
-void whatAboutPersos(Carte cards[4]);
+void whatAboutCards(Carte cards[4]);
 
-void affichageDesVictoires();
+void displayComputedStats(int pillzRestant);
 
-void quiCommenceSelonLesEtoiles();
+void findOutFirstPlayer();
 
 void erreur(string message);
 

@@ -16,7 +16,7 @@ using std::endl;
 
 void quit() 
 {
-    cout << endl << endl << "Press Enter to quit.";
+    cout << endl << endl << "Press Enter to quit." << endl;
     getchar();
     exit(EXIT_SUCCESS);
 }
@@ -38,90 +38,85 @@ string getOrdinal(int n)
     }
 }
 
-int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)
+int getLastIdleCard(Carte deck[4]) 
 {
-    string nomDeLaCarte;
-    int carteEnvoyeeEnnemie = 23;
-    bool nomInexistant = false;
-
-    do
+    int res = -1;
+    for (int i = 0 ; i < 4 ; i++) 
     {
-        cout << "\n\n\nWhat card is the enemy sending for the " << getOrdinal(round) << " round ? --> ";
-
-        cin >> nomDeLaCarte;
-
-        changerMajuscules(nomDeLaCarte);
-
-        nomInexistant = true;
-        for (int i = 0 ; i < 4 ; i++)
+        if (! deck[i].utiliseeACoupSur) 
         {
-            if (carteEnnemie[i].nom == nomDeLaCarte)
+            if (res == -1)
             {
-                carteEnvoyeeEnnemie = i;
-                nomInexistant = false;
-                break;
+                res = i;
+            }
+            else
+            {
+                erreur("autresFonctions/getLastIdleCard() : More than one card is idle");
+                quit();
             }
         }
-
-        if (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || nomInexistant)
-            cout << "\nI don't think so !\n";
-
-        else if (carteEnnemie[carteEnvoyeeEnnemie].utiliseeACoupSur && !nomInexistant)
-            cout << endl << ALREADY_PLAYED_STRING << endl;
     }
-    while (carteEnvoyeeEnnemie < 0 || carteEnvoyeeEnnemie > 3 || carteEnnemie[carteEnvoyeeEnnemie].utiliseeACoupSur);
+    return res; 
+}
 
-    *carteQuIlEnvoie = carteEnvoyeeEnnemie;
 
-    return carteEnvoyeeEnnemie;
+
+void findOutWhichCardEnemySent(string question, int round, int& enemyCardSent)
+{//FIXME make it work even when several cards in the enemy's deck have the same name
+    if (round == 4)
+    {
+        enemyCardSent = getLastIdleCard(carteEnnemie);
+    }
+    else
+    {
+        cout << question;
+
+        bool wrongAnswer = true;
+        do
+        {
+            string cardName;
+            cin >> cardName;
+
+            normalizeCasing(cardName);
+
+            int i = 0;
+            while (i < 4 && carteEnnemie[i].nom != cardName)
+            {
+                i++;
+            }
+
+            if (i != 4)
+            {
+                if (carteEnnemie[i].utiliseeACoupSur)
+                {
+                    cout << endl << ALREADY_PLAYED_STRING << endl;
+                }
+                else
+                {
+                    wrongAnswer = false;
+                    enemyCardSent = i;
+                }
+            } 
+            else
+            {
+                cout << endl << "Uh... Nope ?" << endl;
+            }
+        }
+        while (wrongAnswer);
+    }
+}
+
+int carteEnvoyeeParLEnnemiEnCourage(int *carteQuIlEnvoie, int round)//FIXME pourquoi param ET return ?
+{
+    findOutWhichCardEnemySent("What card is the enemy sending for the " + getOrdinal(round) + " round ? --> ", round, *carteQuIlEnvoie);
+    return *carteQuIlEnvoie;
 }
 
 void reponseEnnemie(int *pillzAdverses, int *pillzQuIlUtilise, int *carteQuIlEnvoie, bool *ennemiUtiliseFury, int round)
 {
-    int carteEnnemieEnReponse = 0;
-    bool nomInexistant = false, dejaUtilisee = false;
-    string nomDeLaCarte;
+    findOutWhichCardEnemySent("In the end, which card did the enemy send for the " + getOrdinal(round) + " round ? : ", round, *carteQuIlEnvoie);
 
-    do
-    {//test de veracite
-        dejaUtilisee = false;
-        nomInexistant = false;
-        cout << "In the end, which card did the enemy send for the " << getOrdinal(round) << " round ? : ";//FIXME pour le 4eme round il a pas le choix...
-
-        cin >> nomDeLaCarte;
-
-        changerMajuscules(nomDeLaCarte);
-
-        for (int i = 0 ; i < 4 ; i++)
-        {
-            if (carteEnnemie[i].nom == nomDeLaCarte)
-            {
-                if (carteEnnemie[i].utiliseeACoupSur)
-                    dejaUtilisee = true;
-                else
-                {
-                    carteEnnemieEnReponse = i;
-                    nomInexistant = false;
-                    dejaUtilisee = false;
-                    break;
-                }
-            }
-            else
-                nomInexistant = true;
-        }
-
-        if (carteEnnemieEnReponse < 0 || carteEnnemieEnReponse > 3 || (nomInexistant && !dejaUtilisee))
-            cout << "\nUh... Nope ?\n";
-
-        else if (dejaUtilisee)
-            cout << endl << ALREADY_PLAYED_STRING << endl;
-    }
-    while (carteEnnemie[carteEnnemieEnReponse].utiliseeACoupSur || carteEnnemieEnReponse < 0 || carteEnnemieEnReponse > 3 || dejaUtilisee || nomInexistant);
-
-    carteEnnemie[carteEnnemieEnReponse].utiliseeACoupSur = true;
-
-    *carteQuIlEnvoie = carteEnnemieEnReponse;
-
+    carteEnnemie[*carteQuIlEnvoie].utiliseeACoupSur = true;
     ilAvaitMisCombienDePillz(*pillzAdverses, pillzQuIlUtilise, ennemiUtiliseFury);
 }
 
@@ -134,11 +129,11 @@ void ilAvaitMisCombienDePillz(int pillzAdverses, int *pillzQuIlUtilise, bool *en
     {
         do
         {
-            cout << "\nHow many pillz on the card ? ";
+            cout << endl << "How many pillz on the card ? ";
             cin >> pillzMis;
 
             if (pillzMis > pillzAdverses || pillzMis < 0)
-                cout << "That's impossible...\n";
+                cout << "That's impossible..." << endl;
         }
         while (pillzMis > pillzAdverses || pillzMis < 0);
     }
@@ -291,29 +286,29 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
 
     if (defaiteACoupSur)
     {
-        cout << endl << "I'm sorry... There is absolutely now way to win..." << endl << endl << "Unless the other guy gets a power outage !";
+        cout << endl << "I'm sorry... There is absolutely no way to win..." << endl << endl << "Unless the other guy gets a power outage !";
         quit();
     }
     else
     {
-        cout << endl << "Il faut utiliser " << carteAUtiliser->nom;
+        cout << endl << "You have to send " << carteAUtiliser->nom;
 
         if (*pillz > 0)
-            cout << " avec " << pillzAUtiliser << " pillz";
+            cout << " with " << pillzAUtiliser << " pillz";
 
         if (*ilFautUtiliserLaFury)
-            cout << " et la fury";
+            cout << " and fury";
 
         if (victoireACoupSur)
-            cout << " (VICTOIRE A COUP SUR)";
+            cout << " (GUARANTEED VICTORY)";
 
-        cout << " (" << carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser] << " victoires eventuelles)\n\n";
+        cout << " (" << carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser] << " victoires eventuelles)" << endl << endl;
 
-        cout << "Je suppose que tu as suivi mon conseil.\nJe considere donc cette carte ";
+        cout << "I'll assume you played as recommended." << endl << "I therefore consider this card ";
         if (*pillz > 0)
-            cout << "et ces pillz comme utilises.\n";
+            cout << "and pillz used." << endl;
         else
-            cout << "comme utilisee.\n";
+            cout << "used." << endl;
 
         int indicecarteAUtiliser = 0;
         while (&carteAlliee[indicecarteAUtiliser] != carteAUtiliser)
@@ -380,26 +375,40 @@ void gererPremierRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* po
 #endif
 }
 
+
+string getIdleReminder(Carte deck[4]) 
+{
+    string res;
+    for (int i = 0 ; i < 4 ; i++) {
+        if (!deck[i].utiliseeACoupSur) {
+            res += deck[i].nom + " ";
+        }
+    }
+    return res;
+}
+
 void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsDeVieAdverses, int* round, bool courageEnnemi, int dernierRoundACalculer = 4)
 {
     int pillzQueJUtilise = 0, pillzQuIlUtilise = 0, carteQueJEnvoie = 0, carteQuIlEnvoie = 0, carteCourageEnnemie = -1;
     bool ilFautUtiliserLaFury = false, ennemiUtiliseFury = false;
 
     (*round)++;
-    cout << "\n\nThe " << getOrdinal(*round) << " round is about to begin.\n";
+    cout << endl << endl << "The " << getOrdinal(*round) << " round is about to begin." << endl;
 
     cout << whatAboutPillzHP(*pillz, *pillzAdverses, *pointsDeVie, *pointsDeVieAdverses);
+    cout << "Your cards :"  << endl << "\t" << getIdleReminder(carteAlliee)  << endl; 
+    cout << "His cards  :"  << endl << "\t" << getIdleReminder(carteEnnemie) << endl << endl; 
 
-    remiseAZero();
+    reset();
 
     if (courageEnnemi)
         carteCourageEnnemie = carteEnvoyeeParLEnnemiEnCourage(&carteQuIlEnvoie, *round);
 
     calculerRound(*round, *pointsDeVie, *pointsDeVieAdverses, *pillz, *pillzAdverses, true, carteCourageEnnemie, dernierRoundACalculer);
-    cout << "Calcul complete.\n";
+    cout << "Calcul complete." << endl;
 
 	if (dernierRoundACalculer == 4) { // Decided to brute force all 4 rounds
-		affichageDesVictoires();
+		displayComputedStats(*pillz);
 		faisCa(pillz, &pillzQueJUtilise, &carteQueJEnvoie, &ilFautUtiliserLaFury);
 	} else {
 		int max = carteAlliee[0].guessedScore[0];//FIXME et si déjà envoyée, lors d'un round >1 ?

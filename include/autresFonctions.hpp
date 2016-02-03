@@ -1,6 +1,12 @@
 #pragma once
 
 
+void findOutWhichCardEnemySent(string question, int round, int& enemyCardSent);
+
+string getIdleReminder(Carte deck[4]);
+
+int getLastIdleCard(Carte deck[4]);
+
 void quit();
 
 string getOrdinal(int n);
