@@ -291,7 +291,7 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
     }
     else
     {
-        cout << endl << "You have to send " << carteAUtiliser->nom;
+        cout << endl << "You should send " << carteAUtiliser->nom;
 
         if (*pillz > 0)
             cout << " with " << pillzAUtiliser << " pillz";
@@ -302,17 +302,19 @@ void faisCa(int *pillz, int *pillzQueJUtilise, int *carteQueJEnvoie, bool *ilFau
         if (victoireACoupSur)
             cout << " (GUARANTEED VICTORY)";
 
-        cout << " (" << carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser] << " victoires eventuelles)" << endl << endl;
+        cout << " (" << ((*ilFautUtiliserLaFury) ? carteAUtiliser->victoiresAvecXpillzEtFury[pillzAUtiliser] : 
+                                                   carteAUtiliser->victoiresAvecXpillzEntreCrochets[pillzAUtiliser])
+        << " possible victories)." << endl << endl;
 
         cout << "I'll assume you played as recommended." << endl << "I therefore consider this card ";
         if (*pillz > 0)
-            cout << "and pillz used." << endl;
-        else
-            cout << "used." << endl;
+            cout << "and pillz ";
+        cout << "used." << endl;
 
         int indicecarteAUtiliser = 0;
-        while (&carteAlliee[indicecarteAUtiliser] != carteAUtiliser)
+        while (&carteAlliee[indicecarteAUtiliser] != carteAUtiliser) { //FIXME what is this pointer horror ? 
             indicecarteAUtiliser++;
+        }
         *carteQueJEnvoie = indicecarteAUtiliser;
         *pillzQueJUtilise = pillzAUtiliser;
     }
@@ -361,7 +363,7 @@ void majPvPillz(int *pointsDeVie, int *pointsDeVieAdverses, int *pillz, int *pil
     }
 
     else
-        erreur("autresFonctions/majPvPillz : combat ne vaut VAINQUEUR, ni PERDANT, ni EGALITE\n");
+        erreur("autresFonctions/majPvPillz : duel result is in no coherent state");
 }
 
 
@@ -446,15 +448,13 @@ void traiterRound(int* pillz, int* pillzAdverses, int* pointsDeVie, int* pointsD
 		ilFautUtiliserLaFury = f;
 	}
 
-    if (courageEnnemi)
-    {
+    if (courageEnnemi) {
         if (*pillzAdverses > 0)
             cout << endl << "Done ?" << endl << endl << "Please indicate how many pillz the enemy used as soon as possible." << endl;
 
         ilAvaitMisCombienDePillz(*pillzAdverses, &pillzQuIlUtilise, &ennemiUtiliseFury);
     }
-    else
-    {
+    else {
         cout << endl << "Done ?" << endl << endl << "Please indicate what the enemy did as soon as possible." << endl;
         reponseEnnemie(pillzAdverses, &pillzQuIlUtilise, &carteQuIlEnvoie, &ennemiUtiliseFury, *round);
     }

@@ -12,36 +12,36 @@ int attaque(int puissance, int pillzUtilises)
 
 bool egaliteDAttaque(int round)//return true : j'ai gagne.   return false : j'ai perdu. Ben oui c'est pas un titre explicite. Ben tant pis.
 {  //egaliteDAttaque... ET D'ETOILES !
-if (round == 1 || round == 3)
-    return !ennemiCommence;
-else 
-    return ennemiCommence;
+    if (round == 1 || round == 3)
+        return !ennemiCommence;
+    else 
+        return ennemiCommence;
 }
 
 
 void modifPerteGainPillz(int numVic, int *pillzVic, Carte carteVic, int numDef, int *pillzDef, Carte carteDef)
 {//TODO ne gere pas les "stop : +X pillz". Un jour, peut-être, le cas échéant...
-if (carteVic.pouvoir.type == GAIN_PILLZ && carteVic.pouvoirEstActifContre[numDef] && carteVic.pouvoir.condition != DEFAITE)
-    *pillzVic += carteVic.pouvoir.modificateur;
+    if (carteVic.pouvoir.type == GAIN_PILLZ && carteVic.pouvoirEstActifContre[numDef] && carteVic.pouvoir.condition != DEFAITE)
+        *pillzVic += carteVic.pouvoir.modificateur;
 
-if (carteDef.pouvoir.type == GAIN_PILLZ && carteDef.pouvoir.condition == DEFAITE && carteDef.pouvoirEstActifContre[numVic])
-    *pillzDef += carteDef.pouvoir.modificateur;
+    if (carteDef.pouvoir.type == GAIN_PILLZ && carteDef.pouvoir.condition == DEFAITE && carteDef.pouvoirEstActifContre[numVic])
+        *pillzDef += carteDef.pouvoir.modificateur;
 
-if (carteVic.pouvoir.type == PERTE_PILLZ && carteVic.pouvoirEstActifContre[numDef] && carteVic.pouvoir.condition != DEFAITE && *pillzDef > carteVic.pouvoir.minimum)
-{
-    *pillzDef += carteVic.pouvoir.modificateur;
+    if (carteVic.pouvoir.type == PERTE_PILLZ && carteVic.pouvoirEstActifContre[numDef] && carteVic.pouvoir.condition != DEFAITE && *pillzDef > carteVic.pouvoir.minimum)
+    {
+        *pillzDef += carteVic.pouvoir.modificateur;
 
-    if (*pillzDef < carteVic.pouvoir.minimum)
-        *pillzDef = carteVic.pouvoir.minimum;
-}
+        if (*pillzDef < carteVic.pouvoir.minimum)
+            *pillzDef = carteVic.pouvoir.minimum;
+    }
 
-if (carteDef.pouvoir.type == PERTE_PILLZ && carteDef.pouvoir.condition == DEFAITE && carteDef.pouvoirEstActifContre[numVic] && *pillzVic > carteDef.pouvoir.minimum)
-{
-    *pillzVic += carteDef.pouvoir.modificateur;
+    if (carteDef.pouvoir.type == PERTE_PILLZ && carteDef.pouvoir.condition == DEFAITE && carteDef.pouvoirEstActifContre[numVic] && *pillzVic > carteDef.pouvoir.minimum)
+    {
+        *pillzVic += carteDef.pouvoir.modificateur;
 
-    if (*pillzVic < carteDef.pouvoir.minimum)
-        *pillzVic = carteDef.pouvoir.minimum;
-}
+        if (*pillzVic < carteDef.pouvoir.minimum)
+            *pillzVic = carteDef.pouvoir.minimum;
+    }
 }
 
 
@@ -157,7 +157,7 @@ bool jeRemporteLeRound(int resultat, int round)
         return egaliteDAttaque(round);
 }
 
-int oracle(int pv, int pillz, int pvE, int pillzE) {
+int oracle(const int pv, const int pillz, const int pvE, const int pillzE) {
 	return (pv+pillz) - (pvE-pillzE);
 }
 

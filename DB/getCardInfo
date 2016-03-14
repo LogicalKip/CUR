@@ -1,0 +1,187 @@
+#!/bin/bash
+
+function getField {
+	local field=$1
+	echo `grep $field $HTMLFile | sed -r -e "s/.*<div class=\"$field\">([^<]*).*/\1/"`
+}
+
+function getAbilityAttributes {
+	local fullString=$1
+
+	#FIXME keywords on the website may not be the same in the program
+
+	#TODO "Max." (ex : 1313)
+
+	if [[ $fullString =~ Protection\ ?:\ ?Bonus ]]; then
+		pType="PROTECTION_BONUS"
+		pMod=0
+		pMin=0
+		pCond=No_condition 
+	#FIXME Cards like "Condition : Protection bonus" do not have ":" between protection and bonus (ex : 967)
+
+	elif [[ $fullString =~ Protection\ ?:\ ?Dégâts ]]; then
+		pType="PROTECTION_DEGATS"
+		pMod=0
+		pMin=0
+		pCond=No_condition
+	elif [[ $fullString =~ Protection\ ?:\ ?Puis ]]; then
+		pType="PROTECTION_PUISSANCE"
+		pMod=0
+		pMin=0
+		pCond=No_condition
+	else
+		pMod=0
+
+		if [[ $fullString =~ ^.*:\ .*$ ]]; then # Condition
+			pCond=`echo "$fullString" | sed -r -e "s/^([^ ]*) ?: .*$/\1/"`
+		else
+			pCond="No_condition"
+		fi
+
+		if [[ $fullString =~ ^.*,\ Min\ .*$ ]]; then # Minimum
+			pMin=`echo "$fullString" | sed -r -e "s/^.*, Min (-?[0-9]+).*$/\1/"`
+		else
+			pMin="0"
+		fi
+
+		if [[ $fullString =~ Aucun\ pouvoir ]]; then
+			pType=NOTHING
+		elif [[ $fullString =~ \+\ ?[0-9]+\ Pillz ]]; then
+			pType=GAIN_PILLZ
+			pMod=`echo "$fullString" | sed -r -e "s/^.*\+ ?([0-9]+) Pillz.*$/\1/"`
+		elif [[ $fullString =~ \+\ ?[0-9]+\ Vie ]]; then
+			pType=GAIN_VIE
+			pMod=`echo "$fullString" | sed -r -e "s/^.*\+ ?([0-9]+) Vie.*$/\1/"`
+		elif [[ $fullString =~ Dégâts\ \+[0-9]+ ]]; then
+			pType=AUGMENTER_DEGATS
+			pMod=`echo "$fullString" | sed -r -e "s/^.*Dégâts \+([0-9]+).*$/\1/"`
+		elif [[ $fullString =~ Attaque\ \+[0-9]+ ]]; then
+			pType=AUGMENTER_ATTAQUE
+			pMod=`echo "$fullString" | sed -r -e "s/^.*Attaque \+([0-9]+).*$/\1/"`
+		elif [[ $fullString =~ Puis.*\ \+[0-9]+ ]]; then
+			pType=AUGMENTER_PUISSANCE
+			pMod=`echo "$fullString" | sed -r -e "s/^.*Puis.* \+([0-9]+).*$/\1/"`
+		elif [[ $fullString =~ Stop\ Pouvoir\ Adv. ]]; then
+			pType=STOP_POUVOIR
+		elif [[ $fullString =~ Stop\ Bonus\ Adv. ]]; then
+			pType=STOP_BONUS
+		elif [[ $fullString =~ Dégâts\ =\ Dégâts\ Adv. ]]; then
+			pType=COPIER_DEGATS
+		elif [[ $fullString =~ Puis.\ =\ Puis.\ Adv. ]]; then
+			pType=COPIER_PUISSANCE		
+		elif [[ $fullString =~ -[0-9]+\ Puis.\ Adv.,\ Min\ [0-9]+ ]]; then
+			pType=DIMINUER_PUISSANCE
+			pMod=`echo "$fullString" | sed -r -e "s/^.*(-[0-9]+) Puis. Adv., Min\ [0-9]+.*$/\1/"`
+		elif [[ $fullString =~ -[0-9]+\ Dégâts\ Adv.,\ Min\ [0-9]+ ]]; then
+			pType=DIMINUER_DEGATS
+			pMod=`echo "$fullString" | sed -r -e "s/^.*(-[0-9]+) Dégâts Adv., Min\ [0-9]+.*$/\1/"`
+		elif [[ $fullString =~ -[0-9]+\ Attaq.\ Adv.,\ Min\ [0-9]+ ]]; then
+			pType=DIMINUER_ATTAQUE
+			pMod=`echo "$fullString" | sed -r -e "s/^.*(-[0-9]+) Attaq. Adv., Min\ [0-9]+.*$/\1/"`
+		elif [[ $fullString =~ -[0-9]+\ Pillz\ Adv.,\ Min\ [0-9]+ ]]; then
+			pType=PERTE_PILLZ
+			pMod=`echo "$fullString" | sed -r -e "s/^.*(-[0-9]+) Pillz Adv., Min\ [0-9]+.*$/\1/"`
+		fi
+	fi
+}
+
+
+function processCard {
+
+	cardURL="http://ur.xephon.org/?feat=card&card=$1"
+	gotCardData=false
+	nbTry=0
+
+	while [ $gotCardData == false ] && [ $nbTry -le 10 ]
+	do
+		nbTry=$(( $nbTry + 1 ))
+		
+		wget "$cardURL" --quiet --output-document="$HTMLFile"
+
+		if [[ $(grep "dentifiant invalide" "$HTMLFile") == "" ]]; then
+			gotCardData=true
+
+			cardName=$(getField cardName | tr ' ' '_')
+			power=$(getField cardPH)
+			damage=$(getField cardPDD)
+			ability=$(getField cardInPower)
+			bonus=$(getField cardInBonus)
+			stars=`grep lvl $HTMLFile | sed -r -e "s/.*lvl(.).gif.*/\1/"`
+			clan=`grep "/perso/" $HTMLFile -m 1 | sed -r -e "s/.*\/perso\/(\w+)\/.*/\1/g" | tr '[:upper:]' '[:lower:]'`
+			pType="UNDEFINED"
+			pMod="UNDEFINED"
+			pMin="UNDEFINED"
+			pCond="UNDEFINED"
+
+			getAbilityAttributes "$ability"
+
+			if [[ "$pType" == "UNDEFINED" ]]; then
+				# THERE_MUST_BE_AN_INSTRUCTION=true 
+				echo "Character n°$i ($cardName) can't be included (ability=$ability)" >>$RESULTFile
+			else
+				echo "$pType $pMod $pMin $pCond $power $damage $stars $cardName $clan" >>$RESULTFile
+
+				# echo "Download of $cardName complete." >>$RESULTFile
+				# echo "Power : $power" >>$RESULTFile
+				# echo "Damage : $damage" >>$RESULTFile
+				# echo "Ability : $ability" >>$RESULTFile
+				# echo "Bonus : $bonus" >>$RESULTFile
+				# echo "Stars : $stars" >>$RESULTFile
+				# echo "Clan : $clan" >>$RESULTFile
+			fi
+		else
+			gotCardData=false
+			# echo "There is no card n°$i" >>$RESULTFile
+		fi
+		
+		rm $HTMLFile
+
+		sleep 1
+	done
+}
+
+function main {
+	echo "" > $RESULTFile
+	for i in {123..1445}
+	do
+		# echo "Getting card n°$i"
+		processCard $i
+	done
+}
+
+function addNewBloods {
+	wget "http://ur.xephon.org/?feat=newbloods" --quiet --output-document="$HTMLFile"
+
+	regex="<\/div><a href=\"\?feat=card&amp;card=([0-9]+)"
+	newbloods=(`grep "</div><a href=\"?feat=card&amp;card=" $HTMLFile | sed -r -e "s/^.*$regex.*$regex.*$regex.*$regex.*quitter.*$/\1 \2 \3 \4/"`)
+
+	rm $HTMLFile
+
+	for numCard in "${newbloods[@]}"; do
+		processCard $numCard
+	done	
+}
+
+function fix {
+	fileToFix=$RESULTFile
+	while read line
+	do
+		if [[ $(echo "$line" | grep "()") == "" ]]; 
+		then
+			echo "$line"
+		else
+			nb=$(echo "$line" | sed -r -e "s/Character n°([0-9]+) \(\).*/\1/")
+			processCard $nb
+		fi
+	done < "$fileToFix"
+}
+
+function updateDB {
+	# TODO
+	echo "Not yet implemented"
+}
+
+HTMLFile="card.html"
+RESULTFile="persos.txt"
+
+addNewBloods

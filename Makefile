@@ -2,7 +2,7 @@
 #Intended to be at the root of the project folder
 
 EXE=urban
-CC=clang++
+CC=clang++-libc++
 
 SRC_DIR=src
 OBJ_DIR=obj

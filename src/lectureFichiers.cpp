@@ -49,7 +49,7 @@ void affecterBonus(Carte *card, AbilityType type, int modificateur, int minimum)
 
 void definirBonus(Carte *card, int compteur)
 {
-    if (card->clan == "junta")
+    if (card->clan == "lajunta")
         affecterBonus(card, AUGMENTER_DEGATS, 2, 0);
 
     else if (card->clan == "junkz")
@@ -58,7 +58,7 @@ void definirBonus(Carte *card, int compteur)
     else if (card->clan == "pussycats")
         affecterBonus(card, DIMINUER_DEGATS, -2, 1);
 
-    else if (card->clan == "fangpi")
+    else if (card->clan == "fangpiclang")
         affecterBonus(card, AUGMENTER_DEGATS, 2, 0);
 
     else if (card->clan == "uppers")
@@ -200,21 +200,21 @@ AbilityType stringToAbilityType(string s)
 AbilityCondition stringToAbilityCondition(string s) 
 {
     AbilityCondition res;
-    if (s == "NO_CONDITION")
+    if (s == "No_condition")
         res = NO_CONDITION;
-    else if (s == "SUPPORT")
+    else if (s == "Support")
         res = SUPPORT;
-    else if (s == "EN_CAS_DE_STOP")
+    else if (s == "Stop")
         res = EN_CAS_DE_STOP;
-    else if (s == "COURAGE")
+    else if (s == "Courage")
         res = COURAGE;
-    else if (s == "REVANCHE")
+    else if (s == "Revanche")
         res = REVANCHE;
-    else if (s == "CONFIANCE")
+    else if (s == "Confiance")
         res = CONFIANCE;
-    else if (s == "DEFAITE")
+    else if (s == "Défaite")
         res = DEFAITE;
-    else if (s == "CONTRECOUP")
+    else if (s == "Contrecoup")
         res = CONTRECOUP;
     else {
         erreur(s + " is not known as any condition type");
@@ -268,7 +268,7 @@ bool foundCard(string nomCherche, Carte *card)
     {
         cout << "ERROR : cannot find the card : " << nomCherche << "." << endl << 
         "Check for spelling and replace spaces with underscores (_)." << endl << 
-        "Examples : Tanaereva_Cr, No_Nam, Slyde, TrinmkkT, Miss_Lulabee" << endl;
+        "Examples : Tanaereva_Cr, No_Nam, TrinmkkT, Miss_Lulabee, Slyde" << endl;
        
     }
     return cardFound;
